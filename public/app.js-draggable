@@ -1,0 +1,424 @@
+// Improved draggable input handling with proper cleanup
+
+// Store references to event handlers so they can be removed
+const dragHandlers = {
+  mouseDown: null,
+  mouseMove: null,
+  mouseUp: null,
+  touchStart: null,
+  touchMove: null,
+  touchEnd: null,
+  touchCancel: null
+};
+
+// Initialize draggable functionality
+function initDraggable() {
+  const inputArea = document.getElementById('draggable-input-area');
+  const dragHandle = document.querySelector('.drag-handle');
+  const userInput = document.getElementById('user-input');
+  
+  if (!inputArea || !dragHandle) {
+    console.warn('Draggable elements not found in the DOM');
+    return;
+  }
+
+  let isDragging = false;
+
+  // Function to handle mouse down event
+  dragHandlers.mouseDown = function(e) {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY);
+  };
+
+  // Function to handle mouse move event
+  dragHandlers.mouseMove = function(e) {
+    if (!isDragging) return;
+    moveDrag(e.clientX, e.clientY);
+  };
+
+  // Function to handle mouse up event
+  dragHandlers.mouseUp = function() {
+    endDrag();
+  };
+
+  // Function to handle touch start event
+  dragHandlers.touchStart = function(e) {
+    if (!e.touches || e.touches.length === 0) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    startDrag(touch.clientX, touch.clientY);
+  };
+
+  // Function to handle touch move event
+  dragHandlers.touchMove = function(e) {
+    if (!isDragging || !e.touches || e.touches.length === 0) return;
+    
+    // Only prevent default if we're actively dragging to avoid interfering with scrolling
+    if (isDragging) {
+      e.preventDefault();
+    }
+    
+    const touch = e.touches[0];
+    moveDrag(touch.clientX, touch.clientY);
+  };
+
+  // Function to handle touch end event
+  dragHandlers.touchEnd = function() {
+    endDrag();
+  };
+
+  // Function to handle touch cancel event
+  dragHandlers.touchCancel = function() {
+    isDragging = false;
+    inputArea.classList.remove('dragging');
+    document.body.style.userSelect = '';
+    console.log('Touch cancelled');
+  };
+
+  // Common function to start dragging
+  function startDrag(clientX, clientY) {
+    isDragging = true;
+    inputArea.classList.add('dragging');
+    
+    // Get the current position of the input area
+    const rect = inputArea.getBoundingClientRect();
+    
+    // Get the current position of the drag handle
+    const dragHandleRect = dragHandle.getBoundingClientRect();
+    
+    // Calculate the center of the drag handle
+    const dragHandleCenterX = dragHandleRect.left + (dragHandleRect.width / 2);
+    const dragHandleCenterY = dragHandleRect.top + (dragHandleRect.height / 2);
+    
+    // Calculate how much we need to move to center the drag handle under the cursor/touch
+    const moveX = clientX - dragHandleCenterX;
+    const moveY = clientY - dragHandleCenterY;
+    
+    // Calculate the new position by adding the movement to the current position
+    const newX = rect.left + moveX;
+    const newY = rect.top + moveY;
+    
+    // Disable transitions temporarily
+    inputArea.style.transition = 'none';
+    
+    // Always convert to absolute positioning for consistent behavior
+    inputArea.style.position = 'absolute';
+    inputArea.style.left = newX + 'px';
+    inputArea.style.top = newY + 'px';
+    inputArea.style.transform = 'none';
+    
+    // Ensure other positioning properties are cleared
+    inputArea.style.bottom = 'auto';
+    inputArea.style.right = 'auto';
+    inputArea.style.margin = '0';
+    
+    // Force a reflow
+    inputArea.offsetHeight;
+    
+    // Prevent text selection during drag
+    document.body.style.userSelect = 'none';
+    
+    // Use utility function for vibration if available
+    if (typeof triggerSoftVibration === 'function') {
+      triggerSoftVibration();
+    } else if (typeof navigator.vibrate === 'function' && isMobileDevice()) {
+      navigator.vibrate(30);
+    }
+  }
+
+  // Common function to handle dragging movement
+  function moveDrag(clientX, clientY) {
+    // Get the current dimensions and position of the input area
+    const inputWidth = inputArea.offsetWidth;
+    const inputHeight = inputArea.offsetHeight;
+    
+    // Get the current position of the drag handle
+    const dragHandleRect = dragHandle.getBoundingClientRect();
+    
+    // Calculate the center of the drag handle
+    const dragHandleCenterX = dragHandleRect.left + (dragHandleRect.width / 2);
+    const dragHandleCenterY = dragHandleRect.top + (dragHandleRect.height / 2);
+    
+    // Calculate how much we need to move to center the drag handle under the cursor/touch
+    const moveX = clientX - dragHandleCenterX;
+    const moveY = clientY - dragHandleCenterY;
+    
+    // Calculate the new position by adding the movement to the current position
+    const rect = inputArea.getBoundingClientRect();
+    const newX = rect.left + moveX;
+    const newY = rect.top + moveY;
+    
+    // Apply new position with boundaries to keep it within the viewport
+    const margin = 10;
+    
+    // Calculate the maximum X and Y positions
+    const maxX = Math.max(0, window.innerWidth - inputWidth - margin);
+    const maxY = Math.max(0, window.innerHeight - inputHeight - margin);
+    
+    // Ensure we're not restricting movement unnecessarily
+    const boundedX = Math.max(margin, Math.min(newX, maxX));
+    const boundedY = Math.max(margin, Math.min(newY, maxY));
+    
+    // Apply the new position directly without any transforms
+    inputArea.style.position = 'absolute';
+    inputArea.style.left = boundedX + 'px';
+    inputArea.style.top = boundedY + 'px';
+    inputArea.style.bottom = 'auto';
+    inputArea.style.right = 'auto';
+    inputArea.style.transform = 'none';
+    inputArea.style.margin = '0';
+  }
+
+  // Common function to end dragging
+  function endDrag() {
+    if (!isDragging) return;
+    
+    isDragging = false;
+    inputArea.classList.remove('dragging');
+    document.body.style.userSelect = '';
+    
+    // Restore transitions
+    inputArea.style.transition = 'box-shadow 0.3s, transform 0.3s, opacity 0.3s, left 0.3s, top 0.3s';
+    
+    // Save the position to local storage
+    const position = {
+      left: inputArea.style.left,
+      top: inputArea.style.top
+    };
+    
+    try {
+      localStorage.setItem('inputAreaPosition', JSON.stringify(position));
+      console.log('Drag ended, saved position:', position);
+    } catch (e) {
+      console.error('Failed to save position to localStorage:', e);
+    }
+  }
+
+  // Improved function to check and fix the input area's position
+  function checkAndFixPosition() {
+    // Get the current position and dimensions
+    const rect = inputArea.getBoundingClientRect();
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    
+    // Ensure the input area is at least partially visible
+    let needsRepositioning = false;
+    let newLeft = inputArea.style.left;
+    let newTop = inputArea.style.top;
+    
+    // Check if the input area is too far to the right
+    if (rect.left > windowWidth - 100) {
+      newLeft = (windowWidth - 100) + 'px';
+      needsRepositioning = true;
+    }
+    
+    // Check if the input area is too far to the left
+    if (rect.right < 100) {
+      newLeft = (100 - inputArea.offsetWidth) + 'px';
+      needsRepositioning = true;
+    }
+    
+    // Check if the input area is too far down
+    if (rect.top > windowHeight - 100) {
+      newTop = (windowHeight - 100) + 'px';
+      needsRepositioning = true;
+    }
+    
+    // Check if the input area is too far up
+    if (rect.bottom < 100) {
+      newTop = (100 - inputArea.offsetHeight) + 'px';
+      needsRepositioning = true;
+    }
+    
+    // Apply new position if needed
+    if (needsRepositioning) {
+      console.log('Fixing position - element was outside visible area');
+      
+      // Apply with transition for smooth movement
+      inputArea.style.transition = 'left 0.3s, top 0.3s';
+      inputArea.style.left = newLeft;
+      inputArea.style.top = newTop;
+      
+      // Update local storage
+      const position = { left: newLeft, top: newTop };
+      try {
+        localStorage.setItem('inputAreaPosition', JSON.stringify(position));
+      } catch (e) {
+        console.error('Failed to save fixed position to localStorage:', e);
+      }
+    }
+  }
+
+  // Function to load position from local storage with better error handling
+  function loadPosition() {
+    try {
+      const savedPosition = localStorage.getItem('inputAreaPosition');
+      
+      if (savedPosition) {
+        const position = JSON.parse(savedPosition);
+        
+        // Validate position values before applying
+        if (typeof position.left === 'string' && typeof position.top === 'string') {
+          // Disable transitions temporarily for immediate positioning
+          inputArea.style.transition = 'none';
+          
+          // Apply the saved position
+          inputArea.style.position = 'absolute';
+          inputArea.style.left = position.left;
+          inputArea.style.top = position.top;
+          inputArea.style.bottom = 'auto';
+          inputArea.style.right = 'auto';
+          inputArea.style.transform = 'none';
+          inputArea.style.margin = '0';
+          
+          // Force a reflow
+          inputArea.offsetHeight;
+          
+          console.log('Loaded position:', position);
+          
+          // Check if the position is valid after applying
+          setTimeout(checkAndFixPosition, 100);
+          
+          // Restore transitions after position is set and validated
+          setTimeout(() => {
+            inputArea.style.transition = 'box-shadow 0.3s, transform 0.3s, opacity 0.3s, left 0.3s, top 0.3s';
+          }, 200);
+        } else {
+          console.warn('Invalid position format in localStorage, using default position');
+          resetPosition();
+        }
+      } else {
+        console.log('No saved position found, using default position');
+        resetPosition(true);
+      }
+    } catch (e) {
+      console.error('Error loading saved position:', e);
+      resetPosition(true);
+    }
+  }
+
+  // Function to reset position with improved reliability
+  function resetPosition(isInitial = false) {
+    // Clear the saved position
+    try {
+      localStorage.removeItem('inputAreaPosition');
+    } catch (e) {
+      console.error('Failed to clear position from localStorage:', e);
+    }
+    
+    // Apply a smooth animation unless this is the initial positioning
+    inputArea.style.transition = isInitial ? 'none' : 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    
+    // Animate to the default centered position
+    inputArea.style.position = 'absolute';
+    inputArea.style.left = '50%';
+    inputArea.style.top = '50%';
+    inputArea.style.bottom = 'auto';
+    inputArea.style.right = 'auto';
+    inputArea.style.transform = 'translate(-50%, -50%)';
+    inputArea.style.margin = '0';
+    
+    console.log('Reset to default position');
+    
+    // Reset transition after animation completes
+    if (!isInitial) {
+      setTimeout(() => {
+        inputArea.style.transition = 'box-shadow 0.3s, transform 0.3s, opacity 0.3s, left 0.3s, top 0.3s';
+        
+        // Show a confirmation tooltip
+        const tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        tooltip.textContent = 'Position reset';
+        inputArea.appendChild(tooltip);
+        
+        // Remove the tooltip after a few seconds
+        setTimeout(() => {
+          tooltip.style.opacity = '0';
+          setTimeout(() => tooltip.remove(), 500);
+        }, 2000);
+      }, 500);
+    }
+  }
+
+  // Add event listeners for dragging
+  dragHandle.addEventListener('mousedown', dragHandlers.mouseDown);
+  document.addEventListener('mousemove', dragHandlers.mouseMove);
+  document.addEventListener('mouseup', dragHandlers.mouseUp);
+  
+  // Add touch support for mobile devices
+  dragHandle.addEventListener('touchstart', dragHandlers.touchStart, { passive: false });
+  document.addEventListener('touchmove', dragHandlers.touchMove, { passive: false });
+  document.addEventListener('touchend', dragHandlers.touchEnd);
+  document.addEventListener('touchcancel', dragHandlers.touchCancel);
+  
+  // Prevent dragging when interacting with input field
+  userInput.addEventListener('mousedown', e => e.stopPropagation());
+  userInput.addEventListener('touchstart', e => e.stopPropagation());
+  
+  // Add window resize event listener with debounce
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(checkAndFixPosition, 100);
+  });
+  
+  // Find and attach reset button if it exists
+  const resetButton = document.getElementById('reset-position');
+  if (resetButton) {
+    resetButton.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      resetPosition();
+    });
+  }
+  
+  // Load the position when DOM is ready
+  // Use a more reliable approach than setTimeout
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => loadPosition());
+  } else {
+    loadPosition();
+  }
+  
+  // Return a cleanup function
+  return function cleanup() {
+    // Remove event listeners to prevent memory leaks
+    dragHandle.removeEventListener('mousedown', dragHandlers.mouseDown);
+    document.removeEventListener('mousemove', dragHandlers.mouseMove);
+    document.removeEventListener('mouseup', dragHandlers.mouseUp);
+    
+    dragHandle.removeEventListener('touchstart', dragHandlers.touchStart);
+    document.removeEventListener('touchmove', dragHandlers.touchMove);
+    document.removeEventListener('touchend', dragHandlers.touchEnd);
+    document.removeEventListener('touchcancel', dragHandlers.touchCancel);
+    
+    userInput.removeEventListener('mousedown', e => e.stopPropagation());
+    userInput.removeEventListener('touchstart', e => e.stopPropagation());
+    
+    window.removeEventListener('resize', checkAndFixPosition);
+    
+    if (resetButton) {
+      resetButton.removeEventListener('click', resetPosition);
+    }
+    
+    // Clear any pending timeouts
+    clearTimeout(resizeTimeout);
+  };
+}
+
+// Initialize when DOM is ready and store cleanup function for later use
+let cleanupDraggable;
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    cleanupDraggable = initDraggable();
+  });
+} else {
+  cleanupDraggable = initDraggable();
+}
+
+// Clean up when page unloads to prevent memory leaks
+window.addEventListener('beforeunload', () => {
+  if (typeof cleanupDraggable === 'function') {
+    cleanupDraggable();
+  }
+});

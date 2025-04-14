@@ -1,0 +1,211 @@
+/* 
+ * Harmony Typography System
+ * Refined for absolute clarity with no visual noise
+ */
+
+:root {
+  /* Typography Scale - Golden Ratio (1.618) based */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-md: 1.125rem;   /* 18px */
+  --font-size-lg: 1.266rem;   /* 20.25px ~ 1.125 * 1.125 */
+  --font-size-xl: 1.424rem;   /* 22.78px ~ 1.125 * 1.266 */
+  --font-size-2xl: 1.602rem;  /* 25.63px ~ 1.125 * 1.424 */
+  --font-size-3xl: 1.802rem;  /* 28.83px ~ 1.125 * 1.602 */
+  
+  /* Line Heights - Optimized for readability */
+  --line-height-tight: 1.2;   /* Headings */
+  --line-height-normal: 1.5;  /* Body text */
+  --line-height-relaxed: 1.7; /* Lists, code */
+  
+  /* Weights - Simplified for cleaner hierarchy */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  
+  /* Spacing - Refined for optimal reading */
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: -0.01em;
+  --letter-spacing-loose: 0;
+  
+  /* Text colors - Refined for optimal contrast */
+  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-tertiary: rgba(255, 255, 255, 0.5);
+  
+  /* Font stacks - Optimized for rendering */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 
+    Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+/* Base Typography */
+body {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "pnum" 1, "tnum" 0;
+}
+
+/* Heading Typography */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 0.5em;
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+h1 {
+  font-size: var(--font-size-3xl);
+}
+
+h2 {
+  font-size: var(--font-size-2xl);
+}
+
+h3 {
+  font-size: var(--font-size-xl);
+}
+
+h4 {
+  font-size: var(--font-size-lg);
+}
+
+h5 {
+  font-size: var(--font-size-md);
+}
+
+h6 {
+  font-size: var(--font-size-base);
+}
+
+/* Paragraph Typography */
+p {
+  margin: 0 0 1em;
+  max-width: 70ch; /* Optimal reading length */
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+/* Small Text Typography */
+small {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  letter-spacing: var(--letter-spacing-loose);
+}
+
+/* Link Typography */
+a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+a:hover {
+  opacity: 0.8;
+  border-bottom-color: transparent;
+}
+
+/* Code Typography */
+code, pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  line-height: var(--line-height-relaxed);
+}
+
+/* List Typography */
+ul, ol {
+  margin: 0 0 1em;
+  padding-left: 1.5em;
+}
+
+li {
+  margin-bottom: 0.4em;
+}
+
+/* Blockquote Typography */
+blockquote {
+  margin: 1.5em 0;
+  padding-left: 1em;
+  border-left: 3px solid var(--text-tertiary);
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+/* Utility Typography Classes */
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, var(--gradient-1), var(--gradient-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent; /* Fallback */
+  display: inline-block;
+}
+
+.text-sm {
+  font-size: var(--font-size-sm);
+}
+
+.text-xs {
+  font-size: var(--font-size-xs);
+}
+
+.text-lg {
+  font-size: var(--font-size-lg);
+}
+
+.text-xl {
+  font-size: var(--font-size-xl);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+.font-light {
+  font-weight: var(--font-weight-light);
+}
+
+.font-medium {
+  font-weight: var(--font-weight-medium);
+}
+
+/* Responsive Typography */
+@media (max-width: 640px) {
+  :root {
+    --font-size-base: 0.9375rem; /* 15px - Slightly smaller on mobile */
+  }
+  
+  h1 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  h2 {
+    font-size: var(--font-size-xl);
+  }
+  
+  h3 {
+    font-size: var(--font-size-lg);
+  }
+}

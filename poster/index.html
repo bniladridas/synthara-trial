@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harmony - Poster Design</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../public/styles.css">
+    <link rel="stylesheet" href="../public/styles-responsive.css">
+</head>
+<body>
+    <div id="navigation-container"></div>
+    
+    <div class="poster-container">
+        <div class="poster-frame">
+            <div class="poster-header">
+                <h1>HARMONY</h1>
+                <h2>Elegant Web Interface</h2>
+            </div>
+            
+            <div class="poster-content">
+                <div class="feature-circle" id="circle1">
+                    <span>Chat</span>
+                </div>
+                <div class="feature-circle" id="circle2">
+                    <span>Design</span>
+                </div>
+                <div class="feature-circle" id="circle3">
+                    <span>Showcase</span>
+                </div>
+                
+                <div class="poster-description">
+                    <p>A minimalist web application with multiple interfaces</p>
+                    <p>Powered by Together.ai</p>
+                </div>
+            </div>
+            
+            <div class="poster-footer">
+                <div class="tech-badge">Node.js</div>
+                <div class="tech-badge">Express</div>
+                <div class="tech-badge">Together.ai</div>
+                <div class="release-info">Version 1.0</div>
+            </div>
+        </div>
+        
+        <div class="controls-panel">
+            <h3>Poster Controls</h3>
+            <div class="control-group">
+                <label for="color-scheme">Color Scheme:</label>
+                <select id="color-scheme">
+                    <option value="default">Default</option>
+                    <option value="dark">Dark Mode</option>
+                    <option value="vibrant">Vibrant</option>
+                    <option value="minimal">Minimal</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label for="animation-speed">Animation Speed:</label>
+                <input type="range" id="animation-speed" min="0" max="10" value="5">
+            </div>
+            
+            <div class="control-group">
+                <label>Feature Visibility:</label>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="show-chat" checked>
+                    <label for="show-chat">Chat</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="show-design" checked>
+                    <label for="show-design">Design</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="show-showcase" checked>
+                    <label for="show-showcase">Showcase</label>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <button id="download-poster">Download Poster</button>
+                <button id="reset-poster">Reset Design</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../public/navigation.js"></script>
+    <script src="poster.js"></script>
+</body>
+</html>
+</qodoArtifact>

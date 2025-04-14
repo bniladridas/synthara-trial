@@ -1,0 +1,416 @@
+/* 
+ * Harmony API Endpoint Styles
+ * Clean, minimal interface focused on functionality with no visual noise
+ */
+
+:root {
+  /* Color system - Monochromatic with subtle accents */
+  --api-bg-primary: #0f1419;
+  --api-bg-secondary: #171e26;
+  --api-bg-tertiary: #1f2730;
+  --api-text-primary: rgba(255, 255, 255, 0.95);
+  --api-text-secondary: rgba(255, 255, 255, 0.7);
+  --api-text-tertiary: rgba(255, 255, 255, 0.5);
+  --api-accent: #4682b4;
+  --api-accent-light: rgba(70, 130, 180, 0.1);
+  --api-border: rgba(255, 255, 255, 0.1);
+  
+  /* Spacing - Based on 4px grid */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  
+  /* Typography */
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  
+  /* Borders & Radii */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+}
+
+body.api-page {
+  background-color: var(--api-bg-primary);
+  color: var(--api-text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* API Header */
+.api-header {
+  padding: var(--space-5) var(--space-6);
+  background-color: var(--api-bg-secondary);
+  border-bottom: 1px solid var(--api-border);
+}
+
+.api-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.api-logo {
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  color: var(--api-text-primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.api-logo-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--api-accent), rgba(70, 130, 180, 0.8));
+}
+
+.api-nav {
+  display: flex;
+  gap: var(--space-5);
+}
+
+.api-nav-link {
+  color: var(--api-text-secondary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  transition: color 0.2s ease;
+}
+
+.api-nav-link:hover {
+  color: var(--api-text-primary);
+}
+
+.api-nav-link.active {
+  color: var(--api-accent);
+}
+
+/* Main Content Container */
+.api-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-6);
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: var(--space-6);
+}
+
+@media (max-width: 768px) {
+  .api-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* API Sidebar */
+.api-sidebar {
+  position: sticky;
+  top: var(--space-6);
+  height: calc(100vh - var(--space-6) * 2);
+  overflow-y: auto;
+  padding-right: var(--space-4);
+}
+
+.api-sidebar-section {
+  margin-bottom: var(--space-5);
+}
+
+.api-sidebar-title {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--api-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-3);
+}
+
+.api-sidebar-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.api-sidebar-link {
+  padding: var(--space-2) 0;
+}
+
+.api-sidebar-link a {
+  color: var(--api-text-secondary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  display: block;
+  transition: color 0.2s ease;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+}
+
+.api-sidebar-link a:hover {
+  color: var(--api-text-primary);
+  background-color: var(--api-bg-tertiary);
+}
+
+.api-sidebar-link.active a {
+  color: var(--api-accent);
+  background-color: var(--api-accent-light);
+  font-weight: 500;
+}
+
+/* API Content */
+.api-content {
+  min-width: 0; /* Fix for overflow in grid items */
+}
+
+.api-section {
+  margin-bottom: var(--space-7);
+}
+
+.api-section-title {
+  font-size: var(--font-size-xl);
+  font-weight: 500;
+  margin-bottom: var(--space-4);
+  color: var(--api-text-primary);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--api-border);
+}
+
+.api-subsection {
+  margin-bottom: var(--space-5);
+}
+
+.api-subsection-title {
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  margin-bottom: var(--space-3);
+  color: var(--api-text-primary);
+}
+
+/* API Endpoint Card */
+.api-endpoint {
+  background-color: var(--api-bg-secondary);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
+  overflow: hidden;
+}
+
+.api-endpoint-header {
+  display: flex;
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--api-bg-tertiary);
+  border-bottom: 1px solid var(--api-border);
+}
+
+.api-endpoint-method {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  margin-right: var(--space-3);
+  text-transform: uppercase;
+}
+
+.api-endpoint-method.get {
+  background-color: rgba(0, 200, 120, 0.15);
+  color: rgb(0, 200, 120);
+}
+
+.api-endpoint-method.post {
+  background-color: rgba(70, 130, 180, 0.15);
+  color: rgb(70, 130, 180);
+}
+
+.api-endpoint-method.put {
+  background-color: rgba(255, 150, 50, 0.15);
+  color: rgb(255, 150, 50);
+}
+
+.api-endpoint-method.delete {
+  background-color: rgba(255, 70, 70, 0.15);
+  color: rgb(255, 70, 70);
+}
+
+.api-endpoint-path {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--api-text-primary);
+}
+
+.api-endpoint-body {
+  padding: var(--space-4);
+}
+
+.api-endpoint-description {
+  margin-bottom: var(--space-4);
+  color: var(--api-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.api-params-title,
+.api-response-title {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  margin-bottom: var(--space-3);
+  color: var(--api-text-secondary);
+}
+
+.api-param {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px dashed var(--api-border);
+  font-size: var(--font-size-sm);
+}
+
+.api-param:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.api-param-name {
+  font-family: var(--font-mono);
+  color: var(--api-accent);
+}
+
+.api-param-type {
+  color: var(--api-text-tertiary);
+}
+
+.api-param-desc {
+  color: var(--api-text-secondary);
+}
+
+.api-response {
+  margin-top: var(--space-4);
+}
+
+.api-code {
+  background-color: var(--api-bg-tertiary);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  margin: var(--space-3) 0;
+  overflow-x: auto;
+}
+
+.api-code pre {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  line-height: 1.6;
+  color: var(--api-text-primary);
+}
+
+.api-code-comment {
+  color: var(--api-text-tertiary);
+}
+
+.api-code-keyword {
+  color: #8b98fd;
+}
+
+.api-code-string {
+  color: #4fc1a8;
+}
+
+.api-code-number {
+  color: #f9b666;
+}
+
+.api-status {
+  display: inline-block;
+  margin-top: var(--space-3);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-xs);
+  border-radius: var(--radius-full);
+}
+
+.api-status.live {
+  background-color: rgba(0, 200, 120, 0.15);
+  color: rgb(0, 200, 120);
+}
+
+.api-status.beta {
+  background-color: rgba(255, 150, 50, 0.15);
+  color: rgb(255, 150, 50);
+}
+
+.api-status.deprecated {
+  background-color: rgba(255, 70, 70, 0.15);
+  color: rgb(255, 70, 70);
+}
+
+/* API Examples */
+.api-example-tabs {
+  display: flex;
+  margin-bottom: var(--space-3);
+  border-bottom: 1px solid var(--api-border);
+}
+
+.api-example-tab {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+  color: var(--api-text-secondary);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.api-example-tab:hover {
+  color: var(--api-text-primary);
+}
+
+.api-example-tab.active {
+  color: var(--api-accent);
+  border-bottom-color: var(--api-accent);
+}
+
+/* API Documentation page specific styles */
+.api-authentication {
+  background-color: var(--api-bg-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.api-authentication-title {
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  margin-bottom: var(--space-3);
+  color: var(--api-text-primary);
+}
+
+.api-authentication-description {
+  color: var(--api-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-4);
+}
+
+.api-key-example {
+  background-color: var(--api-bg-tertiary);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--api-text-primary);
+  margin-bottom: var(--space-3);
+}

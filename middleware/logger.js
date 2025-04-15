@@ -1,17 +1,5 @@
-const fs = require('fs');
-const path = require('path');
-
-// Create logs directory if it doesn't exist
-const logsDir = path.join(__dirname, '../logs');
-if (!fs.existsSync(logsDir)) {
-  fs.mkdirSync(logsDir);
-}
-
-// Logger setup
-const getLogStream = () => {
-  const date = new Date().toISOString().split('T')[0];
-  return fs.createWriteStream(path.join(logsDir, `${date}.log`), { flags: 'a' });
-};
+// Serverless-friendly logger setup
+// No file system operations in serverless environments
 
 // Logger function
 const logger = {
@@ -24,7 +12,6 @@ const logger = {
       ...meta
     };
     console.log(JSON.stringify(logEntry));
-    getLogStream().write(JSON.stringify(logEntry) + '\n');
   },
   error: (message, error = null, meta = {}) => {
     const timestamp = new Date().toISOString();
@@ -40,16 +27,15 @@ const logger = {
       ...meta
     };
     console.error(JSON.stringify(logEntry));
-    getLogStream().write(JSON.stringify(logEntry) + '\n');
   }
 };
 
 // Middleware to attach logger to request object
 const loggerMiddleware = (req, res, next) => {
   req.logger = logger;
-  
+
   const startTime = Date.now();
-  
+
   // Log request
   logger.info('Incoming request', {
     method: req.method,

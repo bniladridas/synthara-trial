@@ -45,18 +45,24 @@ app.use((err, req, res, next) => {
     method: req.method,
     path: req.path
   });
-  
-  res.status(500).json({ 
-    error: 'Internal server error', 
-    message: process.env.NODE_ENV === 'production' ? 'Something went wrong' : err.message 
+
+  res.status(500).json({
+    error: 'Internal server error',
+    message: process.env.NODE_ENV === 'production' ? 'Something went wrong' : err.message
   });
 });
 
-// Start the server
-app.listen(port, () => {
-  logger.info('Server started', {
-    port,
-    nodeEnv: process.env.NODE_ENV,
-    timestamp: new Date().toISOString()
+// In development, start the server
+// In production (Vercel), the server is started automatically
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port, () => {
+    logger.info('Server started', {
+      port,
+      nodeEnv: process.env.NODE_ENV,
+      timestamp: new Date().toISOString()
+    });
   });
-});
+}
+
+// Export the Express app for serverless environments
+module.exports = app;

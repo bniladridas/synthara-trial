@@ -26,7 +26,7 @@ router.post('/api/cookies/accept', (req, res) => {
     ip: req.ip,
     userAgent: req.get('user-agent')
   });
-  
+
   // Set a cookie to remember acceptance
   res.cookie('cookiesAccepted', 'true', {
     maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
@@ -34,7 +34,7 @@ router.post('/api/cookies/accept', (req, res) => {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict'
   });
-  
+
   res.json({ status: 'success' });
 });
 
@@ -42,6 +42,12 @@ router.post('/api/cookies/accept', (req, res) => {
 router.get('/prompt-book', (req, res) => {
   req.logger.info('Serving prompt book page');
   res.sendFile(path.join(__dirname, '../public', 'prompt-book.html'));
+});
+
+// Add the Linux & Git route
+router.get('/linux-git', (req, res) => {
+  req.logger.info('Serving Linux & Git page');
+  res.sendFile(path.join(__dirname, '../public', 'linux-git.html'));
 });
 
 module.exports = router;

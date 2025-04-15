@@ -192,19 +192,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentPlaceholderIndex = 0;
 
-  // Function to update the placeholder text with a smooth transition
+  // Function to update the placeholder text with an ultra smooth transition
   const updatePlaceholder = () => {
-    // Fade out
-    userInput.style.opacity = '0.4';
+    // Fade out very subtly
+    userInput.style.opacity = '0.5';
 
     setTimeout(() => {
       // Update placeholder
       currentPlaceholderIndex = (currentPlaceholderIndex + 1) % placeholders.length;
       userInput.setAttribute('placeholder', placeholders[currentPlaceholderIndex]);
 
-      // Fade in
+      // Fade in gradually
       userInput.style.opacity = '1';
-    }, 500);
+    }, 400); // Slightly faster transition
   };
 
   // Start the placeholder rotation after a delay
@@ -212,8 +212,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set initial placeholder
     userInput.setAttribute('placeholder', placeholders[0]);
 
-    // Update placeholder every 4 seconds
-    setInterval(updatePlaceholder, 4000);
+    // Update placeholder every 5 seconds for a more relaxed pace
+    setInterval(updatePlaceholder, 5000);
   }, 1000);
 
   // Privacy badge functionality
@@ -1085,12 +1085,12 @@ document.addEventListener('DOMContentLoaded', () => {
           const overallIndex = wordIndex * 5 + charIndex; // Approximate position
           charSpan.style.setProperty('--char-index', overallIndex);
 
-          // Add a subtle variation to the animation duration for a more organic feel
-          const durationVariation = 0.95 + (Math.random() * 0.1); // Between 0.95 and 1.05
+          // Add a very subtle variation to the animation duration for a more organic feel
+          const durationVariation = 0.97 + (Math.random() * 0.06); // Between 0.97 and 1.03 - more subtle
           charSpan.style.animationDuration = `calc(var(--wave-duration) * ${durationVariation})`;
 
-          // Add gradient color variation
-          const hueShift = Math.floor(Math.random() * 20) - 10; // -10 to +10
+          // Add very subtle gradient color variation
+          const hueShift = Math.floor(Math.random() * 10) - 5; // -5 to +5 - more subtle
           charSpan.style.filter = `hue-rotate(${hueShift}deg)`;
 
           element.appendChild(charSpan);

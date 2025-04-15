@@ -84,7 +84,8 @@ function updateArchitectureDescription(techName) {
         'NLP': 'Natural Language Processing breaks down user text into meaningful components, extracting intent, entities, and sentiment to drive understanding.',
         'LLM': 'Large Language Models form the foundation of our text generation system, creating coherent, contextually relevant responses based on processed inputs.',
         'API': 'Our API Gateway manages all external connections, ensuring secure and efficient data exchange between components and third-party services.',
-        'Cloud': 'Cloud infrastructure provides scalable computing resources, enabling real-time processing and seamless service delivery.'
+        'Cloud': 'Cloud infrastructure provides scalable computing resources, enabling real-time processing and seamless service delivery.',
+        'AccComp': 'Accelerated Computing with our Llama software delivers high-performance processing for visual intelligence tasks, enabling real-time analysis and understanding of visual data.'
     };
 
     // Update the description text
@@ -151,7 +152,17 @@ function initSVGPaths() {
         'cloud-cloud-api': createPath('cloud-services', 'api-gateway'),
         'cloud-api-llm': createPath('api-gateway', 'llm-core'),
         'cloud-llm-response': createPath('llm-core', 'response-generation'),
-        'cloud-response-ui': createPath('response-generation', 'user-interface')
+        'cloud-response-ui': createPath('response-generation', 'user-interface'),
+
+        // AccComp flows (Accelerated Computing)
+        'acccomp-input-ml': createPath('user-input', 'ml-models'),
+        'acccomp-apis-ml': createPath('external-apis', 'ml-models'),
+        'acccomp-db-ml': createPath('databases', 'ml-models'),
+        'acccomp-ml-llm': createPath('ml-models', 'llm-core'),
+        'acccomp-llm-api': createPath('llm-core', 'api-gateway'),
+        'acccomp-api-cloud': createPath('api-gateway', 'cloud-services'),
+        'acccomp-llm-response': createPath('llm-core', 'response-generation'),
+        'acccomp-response-ui': createPath('response-generation', 'user-interface')
     };
 
     // Add all paths to the SVG
@@ -238,7 +249,8 @@ function highlightNodes(techName) {
         'NLP': ['user-input', 'external-apis', 'nlp-engine', 'ml-models', 'llm-core', 'response-generation', 'user-interface'],
         'LLM': ['user-input', 'nlp-engine', 'databases', 'llm-core', 'api-gateway', 'response-generation', 'user-interface'],
         'API': ['user-input', 'external-apis', 'api-gateway', 'cloud-services', 'llm-core', 'response-generation', 'user-interface'],
-        'Cloud': ['user-input', 'external-apis', 'databases', 'cloud-services', 'api-gateway', 'llm-core', 'response-generation', 'user-interface']
+        'Cloud': ['user-input', 'external-apis', 'databases', 'cloud-services', 'api-gateway', 'llm-core', 'response-generation', 'user-interface'],
+        'AccComp': ['user-input', 'external-apis', 'databases', 'ml-models', 'llm-core', 'api-gateway', 'cloud-services', 'response-generation', 'user-interface']
     };
 
     // Highlight the relevant nodes
@@ -362,7 +374,8 @@ function getGradientColor(techName) {
         'NLP': 'var(--gradient-3)',
         'LLM': 'var(--gradient-1)',
         'API': 'var(--gradient-2)',
-        'Cloud': 'var(--gradient-3)'
+        'Cloud': 'var(--gradient-3)',
+        'AccComp': 'var(--gradient-1)'
     };
 
     return colorMap[techName] || 'var(--gradient-2)';
@@ -377,7 +390,8 @@ function showTechInfo(techName, element) {
         'NLP': 'Natural Language Processing - Click to see architecture',
         'LLM': 'Large Language Models - Click to see architecture',
         'API': 'Application Programming Interfaces - Click to see architecture',
-        'Cloud': 'Cloud Computing - Click to see architecture'
+        'Cloud': 'Cloud Computing - Click to see architecture',
+        'AccComp': 'Accelerated Computing - Llama & Visual Intelligence - Click to see architecture'
     };
 
     // Create or update tooltip

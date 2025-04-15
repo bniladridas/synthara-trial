@@ -36,12 +36,13 @@
   --letter-spacing: -0.01em; /* Subtle refinement for cleaner text */
   --paragraph-spacing: 1.5em; /* Golden ratio spacing */
   --text-rendering: optimizeLegibility; /* Enhanced text clarity */
+  --font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ss01" 1, "ss02" 1, "cv01" 1, "cv02" 1;
 
-  /* Animation - smoother and more relaxed */
+  /* Animation - smoother and more relaxed with zero visual noise */
   --transition: 300ms cubic-bezier(0.25, 0.1, 0.25, 1); /* Smoother, more relaxed transitions */
   --transition-slow: 400ms cubic-bezier(0.25, 0.1, 0.25, 1); /* Slower version for larger elements */
-  --wave-duration: 1.2s; /* Slightly slower wave animation for a more relaxed feel */
-  --char-delay: 35ms; /* Slightly slower character delay */
+  --wave-duration: 1.1s; /* Slightly faster wave animation for a cleaner feel */
+  --char-delay: 30ms; /* Slightly faster character delay for smoother appearance */
 
   /* UI Elements - absolute minimal proportions */
   --message-radius: 10px; /* Minimal radius for cleaner look */
@@ -72,13 +73,13 @@ body {
   background: linear-gradient(180deg,
     rgba(18, 18, 18, 1) 0%,
     rgba(18, 18, 18, 1) 50%,
-    rgba(18, 18, 18, 0.8) 70%,
-    rgba(51, 102, 204, 0.25) 80%, /* Blue - more subtle */
-    rgba(51, 102, 204, 0.25) 83%,
-    rgba(85, 136, 221, 0.25) 84%, /* Mid blue - more subtle */
-    rgba(85, 136, 221, 0.25) 87%,
-    rgba(255, 140, 0, 0.25) 88%, /* Orange - more subtle */
-    rgba(255, 140, 0, 0.3) 100%
+    rgba(18, 18, 18, 0.85) 70%,
+    rgba(51, 102, 204, 0.2) 80%, /* Blue - even more subtle */
+    rgba(51, 102, 204, 0.2) 83%,
+    rgba(85, 136, 221, 0.2) 84%, /* Mid blue - even more subtle */
+    rgba(85, 136, 221, 0.2) 87%,
+    rgba(255, 140, 0, 0.2) 88%, /* Orange - even more subtle */
+    rgba(255, 140, 0, 0.25) 100%
   );
   background-color: var(--bg-primary); /* Fallback */
   background-attachment: fixed;
@@ -86,7 +87,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: var(--letter-spacing);
   text-rendering: var(--text-rendering);
-  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ss01" 1, "ss02" 1;
+  font-feature-settings: var(--font-feature-settings);
   overflow: hidden;
   min-height: 100vh;
 }
@@ -96,13 +97,13 @@ body.incognito-mode {
   background: linear-gradient(180deg,
     rgba(18, 18, 18, 1) 0%,
     rgba(18, 18, 18, 1) 50%,
-    rgba(18, 18, 18, 0.9) 70%,
-    rgba(220, 230, 255, 0.15) 80%, /* Light blue tint - more subtle */
-    rgba(220, 230, 255, 0.15) 83%,
-    rgba(235, 240, 255, 0.15) 84%, /* Lighter blue tint - more subtle */
-    rgba(235, 240, 255, 0.15) 87%,
-    rgba(255, 245, 235, 0.15) 88%, /* Light orange-white tint - more subtle */
-    rgba(255, 245, 235, 0.2) 100%
+    rgba(18, 18, 18, 0.95) 70%,
+    rgba(220, 230, 255, 0.1) 80%, /* Light blue tint - even more subtle */
+    rgba(220, 230, 255, 0.1) 83%,
+    rgba(235, 240, 255, 0.1) 84%, /* Lighter blue tint - even more subtle */
+    rgba(235, 240, 255, 0.1) 87%,
+    rgba(255, 245, 235, 0.1) 88%, /* Light orange-white tint - even more subtle */
+    rgba(255, 245, 235, 0.15) 100%
   );
 }
 
@@ -377,7 +378,7 @@ main {
 .message {
   max-width: 70%; /* Narrower for better readability */
   padding: var(--spacing-md) var(--spacing-lg); /* More horizontal padding */
-  border-radius: 12px; /* Consistent radius */
+  border-radius: 10px; /* Slightly reduced radius for cleaner look */
   line-height: var(--line-height);
   position: relative;
   font-weight: var(--font-weight-light);
@@ -385,8 +386,8 @@ main {
   white-space: normal;
   word-wrap: break-word;
   transition: opacity var(--transition);
-  backdrop-filter: blur(4px); /* Reduced blur for cleaner look */
-  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(3px); /* Further reduced blur for cleaner look */
+  -webkit-backdrop-filter: blur(3px);
   margin-bottom: 0; /* No bottom margin, using gap instead */
   border: none;
   box-shadow: none; /* No shadow for cleaner look */
@@ -395,14 +396,14 @@ main {
 
 .user-message {
   align-self: flex-end;
-  background: linear-gradient(135deg, rgba(51, 102, 204, 0.9), rgba(85, 136, 221, 0.9)); /* Slightly more transparent */
+  background: linear-gradient(135deg, rgba(51, 102, 204, 0.85), rgba(85, 136, 221, 0.85)); /* Even more transparent */
   color: white;
   box-shadow: none; /* No shadow for cleaner look */
 }
 
 .ai-message {
   align-self: flex-start;
-  background-color: rgba(30, 30, 30, 0.2); /* More transparent for cleaner look */
+  background-color: rgba(30, 30, 30, 0.15); /* Even more transparent for cleaner look */
   color: var(--text-primary);
   border: none;
 }
@@ -432,7 +433,7 @@ main {
   transition: all var(--transition);
 }
 
-/* Markdown message styling - refined for zero visual noise */
+/* Markdown message styling - refined for absolute zero visual noise */
 .markdown-message {
   display: flex;
   flex-direction: column;
@@ -443,6 +444,7 @@ main {
   word-wrap: break-word;
   letter-spacing: var(--letter-spacing);
   text-rendering: var(--text-rendering);
+  font-feature-settings: var(--font-feature-settings);
 }
 
 .markdown-message .wave-text {
@@ -498,13 +500,13 @@ main {
 .markdown-message .code-block-container pre {
   margin: 0.6em 0 0.9em; /* Golden ratio spacing */
   padding: 1em;
-  border-radius: 8px; /* Consistent radius */
-  background-color: rgba(30, 30, 30, 0.5) !important; /* Slightly more subtle */
+  border-radius: 6px; /* Reduced radius for cleaner look */
+  background-color: rgba(30, 30, 30, 0.4) !important; /* Even more subtle */
   overflow-x: auto;
   position: relative;
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   font-size: var(--font-size-xs); /* Use variable */
-  border: 1px solid rgba(255, 255, 255, 0.03); /* Subtle border */
+  border: 1px solid rgba(255, 255, 255, 0.02); /* Even more subtle border */
 }
 
 .markdown-message .code-block-container {
@@ -514,9 +516,9 @@ main {
 .markdown-message code {
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   font-size: var(--font-size-xs); /* Use variable */
-  border-radius: 4px; /* Consistent radius */
+  border-radius: 3px; /* Reduced radius for cleaner look */
   padding: 0.1em 0.3em;
-  background-color: rgba(30, 30, 30, 0.25); /* More subtle */
+  background-color: rgba(30, 30, 30, 0.2); /* Even more subtle */
   letter-spacing: 0; /* No letter spacing for code */
 }
 
@@ -648,9 +650,9 @@ main {
 
 /* Style for when the input is focused - ultra minimal */
 .input-area:has(#user-input:focus) {
-  background-color: rgba(30, 30, 30, 0.05); /* Nearly invisible background when active */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.03); /* Nearly invisible shadow when active */
-  border: 1px solid rgba(255, 255, 255, 0.03); /* Nearly invisible border */
+  background-color: rgba(30, 30, 30, 0.03); /* Virtually invisible background when active */
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.02); /* Virtually invisible shadow when active */
+  border: 1px solid rgba(255, 255, 255, 0.02); /* Virtually invisible border */
 }
 
 @keyframes fadeInUp {
@@ -684,18 +686,18 @@ main {
 }
 
 .drag-handle {
-  width: 40px; /* Wider for better visibility */
-  height: 4px; /* Taller for better visibility */
-  background-color: rgba(255, 255, 255, 0.15); /* Slightly more subtle by default */
-  border-radius: 2px; /* Slightly larger radius */
+  width: 36px; /* Slightly narrower for subtlety */
+  height: 3px; /* Slightly thinner for subtlety */
+  background-color: rgba(255, 255, 255, 0.12); /* Even more subtle by default */
+  border-radius: 1.5px; /* Match height for perfect radius */
   margin: 0 auto var(--spacing-xs);
   cursor: grab;
   transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1); /* Smoother, more relaxed transition */
   touch-action: none;
   position: relative;
   z-index: 2;
-  opacity: 0.6; /* Slightly more subtle by default */
-  box-shadow: 0 0 2px rgba(255, 255, 255, 0.08); /* More subtle glow */
+  opacity: 0.5; /* Even more subtle by default */
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.05); /* Barely visible glow */
 }
 
 /* Add a center point indicator to help with precise positioning */
@@ -765,20 +767,20 @@ main {
 }
 
 .input-area:hover .drag-handle {
-  background-color: rgba(255, 255, 255, 0.2); /* Slightly more visible on hover but still subtle */
-  opacity: 0.8; /* More visible on hover but not too prominent */
-  width: 45px; /* Slightly wider on hover for subtle feedback */
-  transform: translateY(-1px); /* Subtle lift effect */
-  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1); /* Softer glow on hover */
+  background-color: rgba(255, 255, 255, 0.15); /* Slightly more visible on hover but still very subtle */
+  opacity: 0.7; /* More visible on hover but still subtle */
+  width: 40px; /* Slightly wider on hover for subtle feedback */
+  transform: translateY(-0.5px); /* Ultra subtle lift effect */
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.07); /* Even softer glow on hover */
 }
 
 .input-area.dragging .drag-handle {
-  background-color: rgba(70, 130, 180, 0.5); /* More visible when dragging but softer */
+  background-color: rgba(70, 130, 180, 0.4); /* More visible when dragging but even softer */
   cursor: grabbing;
-  opacity: 0.9; /* High but not full opacity for a softer look */
-  width: 50px; /* Wider when dragging but not too dramatic */
-  box-shadow: 0 0 8px rgba(70, 130, 180, 0.3); /* Softer glow when dragging */
-  transform: translateY(-1px); /* Less pronounced lift effect for smoother feel */
+  opacity: 0.8; /* High but not full opacity for an even softer look */
+  width: 44px; /* Wider when dragging but more subtle */
+  box-shadow: 0 0 6px rgba(70, 130, 180, 0.2); /* Even softer glow when dragging */
+  transform: translateY(-0.5px); /* Barely perceptible lift effect for smoother feel */
 }
 
 .tooltip {
@@ -970,12 +972,12 @@ main {
   animation: dots 1.8s steps(5, end) infinite;
 }
 
-/* Wave animation for characters - more subtle and refined */
+/* Wave animation for characters - ultra subtle and refined */
 .wave-char {
   display: inline-block;
   opacity: 0;
-  filter: blur(2px); /* Reduced blur for cleaner look */
-  transform: translateY(3px); /* Reduced movement for subtlety */
+  filter: blur(1px); /* Minimal blur for cleaner look */
+  transform: translateY(2px); /* Minimal movement for extreme subtlety */
   animation: waveIn var(--wave-duration) cubic-bezier(0.2, 0.5, 0.3, 1) forwards;
   will-change: opacity, filter, transform;
   white-space: pre;
@@ -986,19 +988,19 @@ main {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent; /* Fallback */
-  animation-delay: calc(var(--char-index, 0) * 25ms); /* Faster delay between characters */
+  animation-delay: calc(var(--char-index, 0) * 20ms); /* Even faster delay for smoother appearance */
 }
 
 @keyframes waveIn {
   0% {
     opacity: 0;
-    filter: blur(2px); /* Reduced blur */
-    transform: translateY(3px) scale(0.99); /* More subtle movement */
+    filter: blur(1px); /* Minimal blur */
+    transform: translateY(2px) scale(0.995); /* Ultra subtle movement */
     background-position: 0% center;
   }
   60% { /* Adjusted timing */
-    opacity: 0.8;
-    filter: blur(1px); /* Even less blur in the middle */
+    opacity: 0.9;
+    filter: blur(0.5px); /* Barely perceptible blur in the middle */
     background-position: 50% center;
   }
   100% {
@@ -1067,16 +1069,16 @@ main {
 
 /* Removed redundant hover styles */
 
-/* Info panel styles */
+/* Info panel styles - absolute zero noise */
 #info-panel {
   position: fixed;
   top: 0;
   left: calc(-1 * var(--panel-width));
   width: var(--panel-width);
   height: 100%;
-  background-color: rgba(15, 15, 15, 0.97);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: rgba(15, 15, 15, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 300;
   transition: left var(--transition-slow) cubic-bezier(0.34, 1.2, 0.64, 1),
               width var(--transition-slow) cubic-bezier(0.34, 1.2, 0.64, 1),
@@ -1085,109 +1087,78 @@ main {
   box-shadow: none;
   padding: 28px 24px;
   box-sizing: border-box;
-  border-right: 1px solid rgba(255, 255, 255, 0.01);
+  border: none;
   will-change: left, width, padding;
 }
 
-/* Panel drag handle - ultra minimal and smoother */
+/* Panel drag handle - absolute zero noise */
 #panel-drag-handle {
   position: absolute;
   top: 0;
   right: 0;
   width: 1px;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.02); /* Even more subtle by default */
+  background-color: transparent;
   cursor: ew-resize;
   z-index: 310;
-  transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); /* Smoother, more relaxed transition */
+  transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
   touch-action: none;
   will-change: background-color, width;
 }
 
 #panel-drag-handle:hover {
-  background-color: rgba(70, 130, 180, 0.08); /* More subtle hover effect */
-  width: 2px;
+  background-color: rgba(70, 130, 180, 0.03);
+  width: 1px;
 }
 
 #panel-drag-handle:active {
-  background-color: rgba(70, 130, 180, 0.12); /* More subtle active effect */
-  width: 2px;
+  background-color: rgba(70, 130, 180, 0.05);
+  width: 1px;
 }
 
-/* Subtle visual indicator for expanded mode */
+/* Absolute zero noise for expanded mode */
 #info-panel.expanded #panel-drag-handle {
   width: 1px;
-  background-color: rgba(70, 130, 180, 0.03); /* Even more subtle in expanded mode */
+  background-color: transparent;
   border-left: none;
 }
 
 #info-panel.expanded #panel-drag-handle:hover {
-  background-color: rgba(70, 130, 180, 0.08); /* More subtle hover effect in expanded mode */
-  width: 2px;
+  background-color: rgba(70, 130, 180, 0.03);
+  width: 1px;
 }
 
 #info-panel.expanded #panel-drag-handle:active {
-  background-color: rgba(70, 130, 180, 0.15);
-  width: 2px;
+  background-color: rgba(70, 130, 180, 0.05);
+  width: 1px;
 }
 
-/* Minimal tooltip indicator */
-#panel-drag-handle::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: 6px;
-  width: 3px;
-  height: 24px;
-  transform: translateY(-50%);
-  background-color: rgba(70, 130, 180, 0.1);
-  border-radius: 1.5px;
-  opacity: 0;
-  transition: opacity 0.3s ease, width 0.3s ease;
-  pointer-events: none;
-  z-index: 320;
-}
+/* Removed tooltip indicator for zero noise */
 
-#panel-drag-handle:hover::after {
-  opacity: 1;
-}
-
-#info-panel.expanded #panel-drag-handle::after {
-  right: auto;
-  left: 6px;
-}
-
-/* Add subtle dots to indicate draggability */
-#panel-drag-handle::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: 3px;
-  width: 2px;
-  height: 40px;
-  transform: translateY(-50%);
-  background-image: radial-gradient(circle, rgba(70, 130, 180, 0.2) 1px, transparent 1px);
-  background-size: 2px 6px;
-  background-repeat: repeat-y;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-#panel-drag-handle:hover::before {
-  opacity: 0.7;
-}
-
-#info-panel.expanded #panel-drag-handle::before {
-  right: auto;
-  left: 3px;
-}
+/* Removed draggability indicator for zero noise */
 
 /* Expanded panel state */
 #info-panel.expanded {
   width: 100%;
   padding: 32px 48px;
   left: 0;
+  position: relative;
+}
+
+/* Red gradient at the bottom of expanded panel - horizontal as preferred */
+#info-panel.expanded::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px; /* Slightly reduced height */
+  background: linear-gradient(to right, transparent 0%, rgba(220, 50, 50, 0.25) 20%, rgba(200, 30, 30, 0.4) 50%, rgba(220, 50, 50, 0.25) 80%, transparent 100%);
+  background-size: 200% 100%;
+  box-shadow: 0 0 60px 10px rgba(200, 30, 30, 0.15); /* Softer glow */
+  pointer-events: none;
+  z-index: 0;
+  animation: gradientShift 15s ease infinite;
 }
 
 @media (max-width: 768px) {
@@ -1351,15 +1322,15 @@ body.input-dragging * {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: rgba(30, 30, 30, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background-color: rgba(30, 30, 30, 0.3);
+  border: none;
   color: var(--text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: transform var(--transition), opacity var(--transition), background-color var(--transition);
-  opacity: 0.8;
+  opacity: 0.7;
   z-index: 310;
   touch-action: manipulation;
 }
@@ -1375,15 +1346,14 @@ body.input-dragging * {
 }
 
 #close-panel:hover, #expand-panel:hover {
-  transform: scale(1.05);
-  opacity: 1;
+  opacity: 0.9;
   color: var(--text-primary);
-  background-color: rgba(70, 130, 180, 0.2);
+  background-color: rgba(40, 40, 40, 0.4);
 }
 
 #close-panel:active, #expand-panel:active {
-  transform: scale(0.95);
-  background-color: rgba(70, 130, 180, 0.3);
+  opacity: 1;
+  background-color: rgba(50, 50, 50, 0.5);
 }
 
 #close-panel svg, #expand-panel svg {
@@ -1410,6 +1380,8 @@ body.input-dragging * {
   transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
               transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
   will-change: opacity, transform;
+  position: relative;
+  z-index: 5;
 }
 
 #info-panel.open .panel-content {
@@ -1422,7 +1394,7 @@ body.input-dragging * {
   font-size: 20px;
   font-weight: var(--font-weight-light);
   margin-bottom: 20px;
-  background: linear-gradient(90deg, var(--gradient-1), var(--gradient-2));
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1431,20 +1403,20 @@ body.input-dragging * {
   letter-spacing: -0.02em;
 }
 
-/* Features display */
+/* Features display - zero noise */
 .features {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .features span {
   color: var(--text-secondary);
   font-size: 13px;
   font-weight: var(--font-weight-light);
-  letter-spacing: -0.02em;
-  opacity: 0.7;
+  letter-spacing: 0;
+  opacity: 0.6;
   position: relative;
   transition: opacity 0.2s ease;
 }
@@ -1453,7 +1425,7 @@ body.input-dragging * {
   content: '·';
   position: absolute;
   right: -6px;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 /* Minimal drag indicator for full screen mode */
@@ -1488,6 +1460,18 @@ body.input-dragging * {
 @keyframes pulseOpacity {
   0%, 100% { opacity: 0.3; }
   50% { opacity: 0.7; }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -2222,26 +2206,26 @@ body.input-dragging * {
   }
 }
 
-/* Cookie Notice - Ultra Minimal */
+/* Cookie Notice - Absolute Zero Visual Noise */
 .cookie-notice {
   position: fixed;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%) translateY(100px);
-  background: rgba(20, 20, 20, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  padding: 10px 14px;
+  background: rgba(20, 20, 20, 0.6); /* More transparent */
+  backdrop-filter: blur(8px); /* Reduced blur */
+  -webkit-backdrop-filter: blur(8px);
+  padding: 8px 12px; /* Reduced padding */
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px; /* Reduced gap */
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 1000;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 5px; /* Reduced radius */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* Softer shadow */
   max-width: 90%;
   width: max-content;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.03); /* More subtle border */
   opacity: 0;
 }
 
@@ -2262,11 +2246,11 @@ body.input-dragging * {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  min-width: 32px;
-  min-height: 32px;
-  background: rgba(70, 130, 180, 0.2);
+  width: 30px; /* Slightly smaller */
+  height: 30px; /* Slightly smaller */
+  min-width: 30px;
+  min-height: 30px;
+  background: rgba(70, 130, 180, 0.15); /* More subtle */
   color: var(--accent);
   border: none;
   border-radius: 50%;
@@ -2290,12 +2274,12 @@ body.input-dragging * {
 }
 
 .cookie-accept:hover {
-  background: rgba(70, 130, 180, 0.3);
-  transform: scale(1.05);
+  background: rgba(70, 130, 180, 0.2); /* More subtle hover */
+  transform: scale(1.03); /* More subtle scale effect */
 }
 
 .cookie-accept:active {
-  transform: scale(0.95);
+  transform: scale(0.97); /* More subtle scale effect */
 }
 
 @media (max-width: 480px) {
@@ -2334,6 +2318,10 @@ body.input-dragging * {
 .prompt-book-container {
   margin-top: var(--spacing-lg);
   text-align: center;
+}
+
+.prompt-book-container + .prompt-book-container {
+  margin-top: var(--spacing-md);
 }
 
 .prompt-book-link {

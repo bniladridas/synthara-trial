@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Linux & Git - Synthara AI</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="linux-git.css">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="linux-git.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap&text=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!()%@#$%^&*-_+=:;'"" rel="stylesheet">
+    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2" crossorigin>
+    <link rel="icon" href="/svg/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/svg/favicon.svg">
+</head>
+<body>
+    <!-- Particle background -->
+    <div id="particles-js"></div>
+
+    <a href="/" class="top-right-logo" aria-label="Return to Synthara AI">
+        <img src="/svg/logo.svg" alt="Synthara AI Logo" class="logo-svg">
+    </a>
+
+    <div class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light mode">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </div>
+
+    <main class="linux-git-page">
+        <a href="/" class="nav-back" aria-label="Back to home">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+        </a>
+
+        <div class="linux-git-content">
+            <h1>Linux & Git</h1>
+
+            <!-- Terminal header -->
+            <div class="terminal-header">
+                <div class="terminal-controls">
+                    <div class="terminal-control terminal-close"></div>
+                    <div class="terminal-control terminal-minimize"></div>
+                    <div class="terminal-control terminal-maximize"></div>
+                </div>
+                <div class="terminal-title">terminal</div>
+                <div class="terminal-content">
+                    <span class="terminal-prompt">user@synthara:~$</span> <span id="terminal-text"></span><span class="terminal-cursor"></span>
+                </div>
+            </div>
+
+            <!-- Search bar -->
+            <div class="search-container">
+                <input type="text" class="search-bar" id="search-bar" placeholder="Search commands...">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </div>
+
+            <!-- Section navigation -->
+            <div class="section-nav">
+                <a href="#linux-essentials" class="section-nav-item active" data-section="linux-essentials">Linux Essentials</a>
+                <a href="#git-commands" class="section-nav-item" data-section="git-commands">Git Commands</a>
+                <a href="#advanced-techniques" class="section-nav-item" data-section="advanced-techniques">Advanced Techniques</a>
+            </div>
+
+            <!-- Linux Section -->
+            <section id="linux-essentials" class="section-container">
+                <h2>Linux Essentials</h2>
+
+                <div class="command-grid">
+                    <div class="command-card">
+                        <h3>File Navigation</h3>
+                        <div class="command-example">
+                            <code>ls -la</code>
+                            <button class="copy-button" aria-label="Copy to clipboard">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                            <p>List all files with details</p>
+                        </div>
+                        <div class="command-example">
+                            <code>cd /path/to/directory</code>
+                            <p>Change directory</p>
+                        </div>
+                        <div class="command-example">
+                            <code>pwd</code>
+                            <p>Print working directory</p>
+                        </div>
+                    </div>
+
+                    <div class="command-card">
+                        <h3>File Operations</h3>
+                        <div class="command-example">
+                            <code>cp source destination</code>
+                            <p>Copy files or directories</p>
+                        </div>
+                        <div class="command-example">
+                            <code>mv source destination</code>
+                            <p>Move or rename files</p>
+                        </div>
+                        <div class="command-example">
+                            <code>rm -rf directory</code>
+                            <p>Remove files or directories recursively</p>
+                        </div>
+                    </div>
+
+                    <div class="command-card">
+                        <h3>File Permissions</h3>
+                        <div class="command-example">
+                            <code>chmod 755 filename</code>
+                            <p>Change file permissions</p>
+                        </div>
+                        <div class="command-example">
+                            <code>chown user:group filename</code>
+                            <p>Change file ownership</p>
+                        </div>
+                        <div class="command-example">
+                            <code>sudo command</code>
+                            <p>Execute command with superuser privileges</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Git Section -->
+            <section id="git-commands" class="section-container">
+                <h2>Git Commands</h2>
+
+                <div class="command-grid">
+                    <div class="command-card">
+                        <h3>Repository Setup</h3>
+                        <div class="command-example">
+                            <code>git init</code>
+                            <p>Initialize a new repository</p>
+                        </div>
+                        <div class="command-example">
+                            <code>git clone url</code>
+                            <p>Clone a repository</p>
+                        </div>
+                        <div class="command-example">
+                            <code>git remote add origin url</code>
+                            <p>Add a remote repository</p>
+                        </div>
+                    </div>
+
+                    <div class="command-card">
+                        <h3>Basic Workflow</h3>
+                        <div class="command-example">
+                            <code>git add .</code>
+                            <p>Stage all changes</p>
+                        </div>
+                        <div class="command-example">
+                            <code>git commit -m "message"</code>
+                            <p>Commit staged changes</p>
+                        </div>
+                        <div class="command-example">
+                            <code>git push origin branch</code>
+                            <p>Push commits to remote</p>
+                        </div>
+                    </div>
+
+                    <div class="command-card">
+                        <h3>Branching</h3>
+                        <div class="command-example">
+                            <code>git branch</code>
+                            <p>List branches</p>
+                        </div>
+                        <div class="command-example">
+                            <code>git checkout -b branch-name</code>
+                            <p>Create and switch to new branch</p>
+                        </div>
+                        <div class="command-example">
+                            <code>git merge branch-name</code>
+                            <p>Merge branch into current branch</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Advanced Section -->
+            <section id="advanced-techniques" class="section-container">
+                <h2>Advanced Techniques</h2>
+
+                <div class="command-grid">
+                    <div class="command-card">
+                        <h3>Git Advanced</h3>
+                        <div class="command-example">
+                            <code>git rebase main</code>
+                            <p>Reapply commits on top of another branch</p>
+                        </div>
+                        <div class="command-example">
+                            <code>git rebase -i HEAD~3</code>
+                            <p>Interactive rebase of last 3 commits</p>
+                        </div>
+                        <div class="command-example">
+                            <code>git stash</code>
+                            <p>Save changes temporarily</p>
+                        </div>
+                    </div>
+
+                    <div class="command-card">
+                        <h3>Linux Pipes</h3>
+                        <div class="command-example">
+                            <code>command1 | command2</code>
+                            <p>Pipe output of command1 to command2</p>
+                        </div>
+                        <div class="command-example">
+                            <code>grep pattern filename</code>
+                            <p>Search for pattern in file</p>
+                        </div>
+                        <div class="command-example">
+                            <code>find . -name "*.txt"</code>
+                            <p>Find all text files in current directory</p>
+                        </div>
+                    </div>
+
+                    <div class="command-card">
+                        <h3>Shell Scripting</h3>
+                        <div class="command-example">
+                            <code>#!/bin/bash</code>
+                            <p>Shebang line for bash scripts</p>
+                        </div>
+                        <div class="command-example">
+                            <code>for i in {1..5}; do echo $i; done</code>
+                            <p>Basic for loop in bash</p>
+                        </div>
+                        <div class="command-example">
+                            <code>if [ $x -eq 0 ]; then echo "zero"; fi</code>
+                            <p>Basic if condition in bash</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

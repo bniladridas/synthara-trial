@@ -1,92 +1,128 @@
-# Llama Chat Interface
+# Synthara AI Chat
 
-![Interface Image](./png/interface.png)
+A minimalist interface for LLM conversations
 
-## Overview
+Clean, distraction-free interface designed with simplicity and performance in mind.
 
-Llama Chat is a minimalist chat interface designed to interact with the Llama-3.3-70B AI model, providing an easy-to-use platform for communication.
-
-## Project Structure
-
-- **server.js**: Main server file powering the application using Express.js.
-- **public/**: Contains static assets such as CSS and JavaScript files for UI.
-- **poster/**: Holds resources for the poster design feature of the application.
-- **showcase/**: Contains HTML and associated resources for showcasing features such as cloud-native demos.
-
-## Installation
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/bniladridas/llama-chat-interface.git
-   cd llama-chat-interface
-   ```
-
-2. **Install dependencies:**
-
-   Use npm to install the required packages:
-
-   ```bash
-   npm install
-   ```
-
-## Usage
-
-### Running the Application
-
-To start the application, use the following command:
+## Setup
 
 ```bash
-npm start
+npm install
+npm start  # Important: Always use npm start, not npx server public
 ```
 
-This will launch the server on port specified by `PORT` in your environment variables or default to `3000`.
+Server runs at `http://localhost:3000`
 
-For development with auto-reloading:
+> **Note:** Always use `npm start` to run the server, not `npx server public`. The `npm start` command runs your custom Express server with all the necessary API routes and middleware, while `npx server public` only serves static files and won't handle API requests.
+
+## Verification
+
+When the server is running correctly, you should see logs similar to these:
+
+```json
+{"timestamp":"2025-04-15T04:58:00.612Z","level":"INFO","message":"Incoming request","method":"POST","path":"/api/chat","ip":"::1","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"}
+{"timestamp":"2025-04-15T04:58:00.613Z","level":"INFO","message":"Processing chat request","promptLength":2}
+{"timestamp":"2025-04-15T04:58:03.226Z","level":"INFO","message":"Chat request completed","duration":"2613ms","tokensUsed":140}
+```
+
+These logs confirm that:
+- The API endpoint is working correctly
+- The Together API key is valid and working
+- The server is properly configured
+
+## Structure
+
+```
+/
+├── server.js     # API routes and server logic
+└── public/       # Frontend
+    ├── index.html
+    ├── app.js
+    ├── app-utils.js
+    └── styles.css
+```
+
+## Dependencies
+
+- **express** — Web server framework
+- **axios** — HTTP client for API requests
+- **cors** — Cross-origin resource sharing
+- **dotenv** — Environment variable management
+
+## Development
 
 ```bash
 npm run dev
 ```
 
-### Available Routes
+Uses nodemon for automatic server restarts during development.
 
-- **Main Application**: [http://localhost:3000/](http://localhost:3000/)
+## Troubleshooting
 
-- **Poster Design Page**: [http://localhost:3000/poster](http://localhost:3000/poster)
+If you encounter a "Server error (404)" message, check:
 
-- **Showcase Page**: [http://localhost:3000/showcase](http://localhost:3000/showcase)
+1. That you're using `npm start` to run the server, not `npx server public`
+   - The `npx server public` command won't handle API requests correctly
+   - Always use `npm start` to run the full Express server with API routes
 
-- **Cloud Native Showcase**: [http://localhost:3000/showcase/cloud-native](http://localhost:3000/showcase/cloud-native)
+2. Your API key in the `.env` file is valid
+   - Check that the TOGETHER_API_KEY in your .env file is correct
+   - You can verify this by looking for successful API responses in the server logs
 
-- **API Endpoint for Chat**: [http://localhost:3000/api/chat](http://localhost:3000/api/chat) (POST)
+3. The `app-utils.js` file exists in the public directory
+   - This file is required by app.js and contains essential utility functions
+   - If missing, you'll see 404 errors for this file in the server logs
 
-## Environment Variables
+## Deployment on Vercel
 
-The application requires the following environment variables to properly interface with external services:
+### Prerequisites
 
-- `TOGETHER_API_KEY`: Your API key for Together.ai
+1. Push your project to a GitHub repository
+2. Create an account on [Vercel](https://vercel.com)
 
-## Dependencies
+### Steps
 
-Some of the key dependencies include:
+1. In the Vercel dashboard, click "New Project"
+2. Import your GitHub repository
+3. Configure the project:
+   - Framework Preset: Other
+   - Root Directory: ./
+   - Build Command: None (leave empty)
+   - Output Directory: public
 
-- **Express**: Web framework for Node.js
-- **Axios**: Promise-based HTTP client
-- **Cors**: Middleware for enabling CORS
-- **Dotenv**: Module to load environment variables
+4. Add Environment Variables:
+   - Click "Environment Variables" and add:
+     - `TOGETHER_API_KEY`: Your Together API key
+     - `NODE_ENV`: production
 
-## Development Dependencies
+5. Click "Deploy"
 
-- **Nodemon**: Utility for automatically restarting the server during development
+### Verifying Deployment
 
-## License
+- After deployment, Vercel will provide you with a URL
+- Visit the URL to ensure your app is working correctly
+- Check the Function Logs in the Vercel dashboard to see if API requests are being processed
 
-This project is licensed under the ISC License.
+### Troubleshooting Vercel Deployment
 
-## Author
+If you encounter issues with your Vercel deployment:
 
-Llama Chat Team at Synthara.
+1. **API Routes Not Working**:
+   - Check that `vercel.json` is in the root directory
+   - Verify that environment variables are set correctly
+   - Look at Function Logs for specific error messages
 
-## Future Updates
+2. **CORS Errors**:
+   - If you're getting CORS errors, check that your Express CORS middleware is configured correctly
+   - You may need to add your Vercel domain to the allowed origins
 
-Further updates of the project will be managed and hosted at the Synthara company repository on GitHub: [https://github.com/synthara-company](https://github.com/synthara-company).
+3. **Environment Variables**:
+   - Ensure all required environment variables are set in the Vercel dashboard
+   - Remember that local `.env` files are not automatically uploaded to Vercel
+
+## Future Enhancements
+
+- TypeScript integration
+- Bundling optimization
+- Testing framework
+- Code quality tools

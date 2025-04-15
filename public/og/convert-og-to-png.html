@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convert OG Image to PNG</title>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 20px;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #3366cc;
+    }
+    button {
+      background-color: #3366cc;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 10px 0;
+    }
+    button:hover {
+      background-color: #5588dd;
+    }
+    #result {
+      margin-top: 20px;
+    }
+    canvas {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ddd;
+      margin-top: 10px;
+    }
+    a {
+      display: inline-block;
+      margin-top: 10px;
+      color: #3366cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Convert OG Image SVG to PNG</h1>
+    <p>Click the button below to convert the SVG OG image to a PNG image that you can download.</p>
+    
+    <button id="convertBtn">Convert SVG to PNG</button>
+    
+    <div id="result"></div>
+  </div>
+
+  <script>
+    document.getElementById('convertBtn').addEventListener('click', function() {
+      const svgUrl = '/og/og-image.svg';
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const resultDiv = document.getElementById('result');
+      
+      // Set canvas dimensions to match OG image size
+      canvas.width = 1200;
+      canvas.height = 630;
+      
+      // Create image from SVG
+      const img = new Image();
+      img.onload = function() {
+        // Draw image to canvas
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        
+        // Convert canvas to PNG data URL
+        const pngDataUrl = canvas.toDataURL('image/png');
+        
+        // Display the result
+        resultDiv.innerHTML = `
+          <p>Conversion complete! Here's your PNG:</p>
+          <canvas id="outputCanvas" width="${canvas.width}" height="${canvas.height}"></canvas>
+          <br>
+          <a href="${pngDataUrl}" download="og-image.png">Download PNG</a>
+        `;
+        
+        // Draw to the visible canvas
+        const outputCanvas = document.getElementById('outputCanvas');
+        const outputCtx = outputCanvas.getContext('2d');
+        outputCtx.drawImage(img, 0, 0, outputCanvas.width, outputCanvas.height);
+      };
+      
+      img.onerror = function() {
+        resultDiv.innerHTML = '<p>Error loading the SVG file. Please try again.</p>';
+      };
+      
+      img.src = svgUrl;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1584 396" width="1584" height="396">
+  <!-- Background with subtle gradient -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#121212"/>
+      <stop offset="100%" stop-color="#1a1a1a"/>
+    </linearGradient>
+
+    <!-- Logo gradient -->
+    <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3366cc"/>
+      <stop offset="33%" stop-color="#3366cc"/>
+      <stop offset="33.1%" stop-color="#5588dd"/>
+      <stop offset="66%" stop-color="#5588dd"/>
+      <stop offset="66.1%" stop-color="#ff8c00"/>
+      <stop offset="100%" stop-color="#ff8c00"/>
+    </linearGradient>
+
+    <!-- Footer gradient - matches main application -->
+    <linearGradient id="footer-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="rgba(51, 102, 204, 0)" />
+      <stop offset="40%" stop-color="rgba(51, 102, 204, 0.25)" /> <!-- Blue -->
+      <stop offset="50%" stop-color="rgba(85, 136, 221, 0.25)" /> <!-- Mid blue -->
+      <stop offset="60%" stop-color="rgba(255, 140, 0, 0.25)" /> <!-- Orange -->
+      <stop offset="100%" stop-color="rgba(255, 140, 0, 0.3)" />
+    </linearGradient>
+  </defs>
+
+  <!-- Main background -->
+  <rect width="1584" height="396" fill="url(#bg-gradient)"/>
+
+  <!-- Subtle footer gradient - matches main application -->
+  <rect x="0" y="0" width="1584" height="396" fill="url(#footer-gradient)" opacity="0.8"/>
+
+  <!-- Logo -->
+  <g transform="translate(1100, 120) scale(0.8)">
+    <circle cx="100" cy="100" r="90" fill="url(#logo-gradient)"/>
+    <path d="M70,80 C70,70 80,60 100,60 C120,60 130,70 130,80 L130,120 C130,130 120,140 100,140 C80,140 70,130 70,120 Z" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M70,100 L130,100" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+  </g>
+
+  <!-- Text -->
+  <text x="1050" y="140" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="72" font-weight="300" fill="#ffffff" text-anchor="end">Synthara AI</text>
+  <text x="1050" y="200" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="28" font-weight="300" fill="#ffffff" opacity="0.8" text-anchor="end">All things LLMs in a clean, minimal interface</text>
+
+  <!-- Decorative elements -->
+  <g opacity="0.1">
+    <circle cx="180" cy="100" r="40" fill="#3366cc"/>
+    <circle cx="130" cy="180" r="25" fill="#5588dd"/>
+    <circle cx="200" cy="220" r="15" fill="#ff8c00"/>
+  </g>
+</svg>

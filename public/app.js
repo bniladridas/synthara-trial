@@ -1,7 +1,175 @@
 // Main application script with mobile vibration feedback and info panel
 // Uses the Vibration API to provide tactile feedback on mobile devices
 // when responses start appearing or errors occur
+// Function to detect incognito mode - simplified version
+function detectIncognito() {
+  // Check if the URL contains incognito indicators
+  const url = window.location.href.toLowerCase();
+  if (url.includes('incognito') || url.includes('private')) {
+    return Promise.resolve(true);
+  }
+
+  // Check if Chrome's FileSystem API is disabled (common in incognito)
+  return new Promise((resolve) => {
+    if (window.chrome && 'FileSystem' in window) {
+      try {
+        window.webkitRequestFileSystem(
+          window.TEMPORARY, 1,
+          () => resolve(false),
+          () => resolve(true)
+        );
+      } catch (e) {
+        // If there's an error, we'll assume it might be incognito
+        resolve(true);
+      }
+    } else {
+      // For non-Chrome browsers or if FileSystem API is not available
+      // We'll use a simple localStorage test
+      try {
+        localStorage.setItem('test', '1');
+        localStorage.removeItem('test');
+        resolve(false);
+      } catch (e) {
+        resolve(true);
+      }
+    }
+  });
+}
+
+// Function to toggle incognito mode
+function toggleIncognitoMode() {
+  const isCurrentlyIncognito = document.body.classList.contains('incognito-mode');
+
+  if (isCurrentlyIncognito) {
+    // Switch back to normal mode
+    document.body.classList.remove('incognito-mode');
+
+    // Update the privacy badge
+    const privacyBadge = document.querySelector('.privacy-badge');
+    if (privacyBadge) {
+      const privacyText = privacyBadge.querySelector('.privacy-text');
+      if (privacyText) {
+        privacyText.textContent = 'Private';
+      }
+      privacyBadge.title = 'Private conversation';
+
+      const privacyIcon = privacyBadge.querySelector('.privacy-icon');
+      if (privacyIcon) {
+        privacyIcon.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        `;
+      }
+    }
+
+    console.log('Incognito mode disabled');
+  } else {
+    // Switch to incognito mode
+    document.body.classList.add('incognito-mode');
+
+    // Update the privacy badge
+    const privacyBadge = document.querySelector('.privacy-badge');
+    if (privacyBadge) {
+      const privacyText = privacyBadge.querySelector('.privacy-text');
+      if (privacyText) {
+        privacyText.textContent = 'Incognito';
+      }
+      privacyBadge.title = 'Incognito mode active';
+
+      const privacyIcon = privacyBadge.querySelector('.privacy-icon');
+      if (privacyIcon) {
+        privacyIcon.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 17l3-3 3 3 4-4 3 3"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+          </svg>
+        `;
+      }
+    }
+
+    console.log('Incognito mode enabled - whitish footer applied');
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Try to detect incognito mode
+  detectIncognito().then(isIncognito => {
+    if (isIncognito) {
+      toggleIncognitoMode(); // This will enable incognito mode
+    }
+  });
+
+  // Add click handler for the incognito toggle button
+  const incognitoToggle = document.querySelector('.incognito-toggle');
+  if (incognitoToggle) {
+    incognitoToggle.addEventListener('click', toggleIncognitoMode);
+  }
+
+  // Handle orientation changes for mobile devices
+  window.addEventListener('orientationchange', function() {
+    // Wait for the orientation change to complete
+    setTimeout(() => {
+      // Check and fix input area position after orientation change
+      if (typeof checkAndFixPosition === 'function') {
+        checkAndFixPosition();
+      }
+    }, 300);
+  });
+
+  // Handle resize events (including orientation changes)
+  let resizeTimeout;
+  window.addEventListener('resize', function() {
+    // Debounce the resize event
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      // Check if we're on mobile and adjust UI accordingly
+      if (isMobileDevice()) {
+        // Ensure the input area is properly positioned
+        if (typeof checkAndFixPosition === 'function') {
+          checkAndFixPosition();
+        }
+      }
+    }, 250);
+  });
+
+  // Cookie notice functionality
+  const cookieNotice = document.getElementById('cookieNotice');
+  const acceptCookiesBtn = document.getElementById('acceptCookies');
+
+  // Check if user has already accepted cookies
+  const hasAcceptedCookies = localStorage.getItem('cookiesAccepted');
+
+  if (!hasAcceptedCookies) {
+    // Show cookie notice with a slight delay
+    setTimeout(() => {
+      cookieNotice.classList.add('visible');
+      // Trigger a subtle vibration on mobile
+      if (isMobileDevice() && 'vibrate' in navigator) {
+        navigator.vibrate(50);
+      }
+    }, 1500);
+  }
+
+  // Handle cookie acceptance
+  acceptCookiesBtn.addEventListener('click', () => {
+    localStorage.setItem('cookiesAccepted', 'true');
+    cookieNotice.classList.remove('visible');
+
+    // Send acceptance to server
+    fetch('/api/cookies/accept', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({}) // Add empty body to ensure proper POST request
+    }).catch(error => console.error('Error logging cookie acceptance:', error));
+  });
+
   const chatMessages = document.getElementById('chat-messages');
   const userInput = document.getElementById('user-input');
   // Fade overlays removed for cleaner look
@@ -73,19 +241,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Add a tooltip to show the input area is draggable
+  // Show the drag tooltip briefly on page load
   setTimeout(() => {
-    const tooltip = document.createElement('div');
-    tooltip.className = 'tooltip';
-    tooltip.textContent = 'Drag to move';
-    inputArea.appendChild(tooltip);
+    const dragTooltip = document.querySelector('.drag-tooltip');
+    if (dragTooltip) {
+      dragTooltip.style.opacity = '1';
+      dragTooltip.style.transform = 'translate(-50%, 0)';
 
-    // Remove the tooltip after a few seconds
-    setTimeout(() => {
-      tooltip.style.opacity = '0';
-      setTimeout(() => tooltip.remove(), 500);
-    }, 3000);
-  }, 1000);
+      // Hide the tooltip after a few seconds
+      setTimeout(() => {
+        dragTooltip.style.opacity = '0';
+        dragTooltip.style.transform = 'translate(-50%, 10px)';
+      }, 3000);
+    }
+  }, 1500);
 
   // Draggable input area functionality
   let isDragging = false;
@@ -143,14 +312,34 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.userSelect = 'none';
 
     // Trigger a subtle vibration for feedback
-    if (isMobileDevice() && 'vibrate' in navigator) {
-      navigator.vibrate(30);
-    }
+    triggerSoftVibration();
   };
 
-  // Function to handle mouse move event
+  // Variables for smooth dragging with inertia
+  let lastMouseX = 0;
+  let lastMouseY = 0;
+  let velocityX = 0;
+  let velocityY = 0;
+  let lastTimestamp = 0;
+
+  // Function to handle mouse move event with improved smoothness
   const handleMouseMove = (e) => {
     if (!isDragging) return;
+
+    // Calculate velocity for inertia with more relaxed values
+    const now = Date.now();
+    const dt = Math.min(60, now - lastTimestamp); // Slightly higher cap for smoother movement
+
+    if (lastTimestamp > 0 && dt > 0) {
+      // More relaxed velocity calculation (0.85/0.15 instead of 0.8/0.2)
+      // This makes the movement feel more fluid and less reactive to small changes
+      velocityX = 0.85 * velocityX + 0.15 * (e.clientX - lastMouseX) / dt;
+      velocityY = 0.85 * velocityY + 0.15 * (e.clientY - lastMouseY) / dt;
+    }
+
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+    lastTimestamp = now;
 
     // Get the current dimensions and position of the input area
     const inputWidth = inputArea.offsetWidth;
@@ -174,7 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Apply new position with boundaries to keep it within the viewport
     // Add a small margin to ensure it's always accessible
-    const margin = 10;
+    const margin = 16; // Increased margin for better visibility
 
     // Calculate the maximum X and Y positions
     // Make sure we're using the actual window dimensions
@@ -186,6 +375,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const boundedX = Math.max(margin, Math.min(newX, maxX));
     const boundedY = Math.max(margin, Math.min(newY, maxY));
 
+    // Temporarily disable transitions for immediate response
+    inputArea.style.transition = 'none';
+
     // Apply the new position directly without any transforms
     // IMPORTANT: Set all position properties to ensure consistent behavior
     inputArea.style.position = 'absolute';
@@ -195,34 +387,185 @@ document.addEventListener('DOMContentLoaded', () => {
     inputArea.style.right = 'auto';
     inputArea.style.transform = 'none';
     inputArea.style.margin = '0';
+
+    // Force a reflow to ensure the browser applies these changes immediately
+    inputArea.offsetHeight;
   };
 
-  // Function to handle mouse up event
+  // Function to handle mouse up event with inertia
   const handleMouseUp = () => {
     if (isDragging) {
-      // End dragging state
+      // End dragging state but keep velocity for inertia
       isDragging = false;
-      inputArea.classList.remove('dragging');
-      document.body.style.userSelect = '';
 
-      // Restore transitions
-      inputArea.style.transition = 'box-shadow var(--transition), transform var(--transition), opacity var(--transition), left var(--transition), top var(--transition)';
+      // Apply inertia if there's significant velocity
+      const speed = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
 
-      // Save the position to local storage
-      const position = {
-        left: inputArea.style.left,
-        top: inputArea.style.top
-      };
-      localStorage.setItem('inputAreaPosition', JSON.stringify(position));
+      if (speed > 0.1) {
+        // Get current position
+        const rect = inputArea.getBoundingClientRect();
+        const inputWidth = inputArea.offsetWidth;
+        const inputHeight = inputArea.offsetHeight;
+        const margin = 16;
 
-      // Log for debugging
-      console.log('Drag ended, saved position:', position);
+        // Calculate maximum bounds
+        const maxX = Math.max(0, window.innerWidth - inputWidth - margin);
+        const maxY = Math.max(0, window.innerHeight - inputHeight - margin);
+
+        // Apply inertia with more relaxed damping
+        const applyInertia = () => {
+          // Reduce velocity with each frame - more gradual reduction for smoother feel
+          velocityX *= 0.96; // Slightly higher value for more gradual slowdown
+          velocityY *= 0.96;
+
+          // Stop if velocity is too low - slightly higher threshold for smoother ending
+          if (Math.abs(velocityX) < 0.08 && Math.abs(velocityY) < 0.08) {
+            finalizeDrag();
+            return;
+          }
+
+          // Calculate new position with inertia - reduced multiplier for gentler movement
+          const newX = rect.left + velocityX * 14; // Reduced from 16 for more relaxed movement
+          const newY = rect.top + velocityY * 14;
+
+          // Ensure within bounds
+          const boundedX = Math.max(margin, Math.min(newX, maxX));
+          const boundedY = Math.max(margin, Math.min(newY, maxY));
+
+          // If we hit a boundary, stop inertia in that direction
+          if (boundedX !== newX) velocityX = 0;
+          if (boundedY !== newY) velocityY = 0;
+
+          // Update position
+          inputArea.style.left = boundedX + 'px';
+          inputArea.style.top = boundedY + 'px';
+
+          // Update rect for next iteration
+          rect.left = boundedX;
+          rect.top = boundedY;
+
+          // Continue inertia animation
+          requestAnimationFrame(applyInertia);
+        };
+
+        // Start inertia animation
+        requestAnimationFrame(applyInertia);
+      } else {
+        // No significant velocity, just finalize the drag
+        finalizeDrag();
+      }
     }
+  };
+
+  // Function to finalize drag and save position
+  const finalizeDrag = () => {
+    // Remove dragging class and restore user select
+    inputArea.classList.remove('dragging');
+    document.body.style.userSelect = '';
+
+    // Restore transitions
+    inputArea.style.transition = 'opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), ' +
+                               'left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), ' +
+                               'top 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), ' +
+                               'background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), ' +
+                               'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), ' +
+                               'box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), ' +
+                               'border 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+
+    // Save the position to local storage
+    const position = {
+      left: inputArea.style.left,
+      top: inputArea.style.top
+    };
+    localStorage.setItem('inputAreaPosition', JSON.stringify(position));
+
+    // Reset velocity tracking
+    velocityX = 0;
+    velocityY = 0;
+    lastTimestamp = 0;
   };
 
   // Load the position from local storage if available
   const loadPosition = () => {
+    // Check if we're on a mobile device
+    const isMobile = isMobileDevice();
+
+    // Check for saved position
     const savedPosition = localStorage.getItem('inputAreaPosition');
+
+    // If on mobile and no saved position, center the input area
+    if (isMobile && !savedPosition) {
+      console.log('Mobile device detected with no saved position, centering input area');
+      // Center the input area on mobile
+      inputArea.style.transition = 'none';
+      inputArea.style.position = 'absolute';
+      inputArea.style.left = '50%';
+      inputArea.style.top = '50%';
+      inputArea.style.bottom = 'auto';
+      inputArea.style.right = 'auto';
+      inputArea.style.transform = 'translate(-50%, -50%)';
+      inputArea.style.margin = '0';
+
+      // Force a reflow to ensure the browser applies these changes immediately
+      inputArea.offsetHeight;
+
+      // Restore transitions after a short delay with smoother values
+      setTimeout(() => {
+        inputArea.style.transition = 'box-shadow var(--transition), transform var(--transition-slow), opacity var(--transition), left var(--transition-slow), top var(--transition-slow)';
+      }, 50);
+
+      return; // Exit early since we've set the position for mobile
+    } else if (isMobile && savedPosition) {
+      // On mobile with saved position, use the saved position
+      console.log('Mobile device detected with saved position, using saved position');
+      try {
+        const position = JSON.parse(savedPosition);
+
+        // Disable transitions temporarily for immediate positioning
+        inputArea.style.transition = 'none';
+
+        // Apply the saved position
+        inputArea.style.position = 'absolute';
+        inputArea.style.left = position.left;
+        inputArea.style.top = position.top;
+        inputArea.style.bottom = 'auto';
+        inputArea.style.right = 'auto';
+        inputArea.style.transform = 'none';
+        inputArea.style.margin = '0';
+
+        // Force a reflow to ensure the browser applies these changes immediately
+        inputArea.offsetHeight;
+
+        // Restore transitions after a short delay with smoother values
+        setTimeout(() => {
+          inputArea.style.transition = 'box-shadow var(--transition), transform var(--transition-slow), opacity var(--transition), left var(--transition-slow), top var(--transition-slow)';
+        }, 50);
+
+        return; // Exit early since we've set the position for mobile
+      } catch (e) {
+        console.error('Error loading saved position on mobile:', e);
+        // If there's an error, fall back to centering
+        inputArea.style.transition = 'none';
+        inputArea.style.position = 'absolute';
+        inputArea.style.left = '50%';
+        inputArea.style.top = '50%';
+        inputArea.style.bottom = 'auto';
+        inputArea.style.right = 'auto';
+        inputArea.style.transform = 'translate(-50%, -50%)';
+        inputArea.style.margin = '0';
+
+        // Force a reflow
+        inputArea.offsetHeight;
+
+        // Restore transitions
+        setTimeout(() => {
+          inputArea.style.transition = 'box-shadow var(--transition), transform var(--transition-slow), opacity var(--transition), left var(--transition-slow), top var(--transition-slow)';
+        }, 50);
+
+        return; // Exit early
+      }
+    }
+    // For non-mobile devices, load the saved position if available
     if (savedPosition) {
       try {
         const position = JSON.parse(savedPosition);
@@ -245,9 +588,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Force a reflow to ensure the browser applies these changes immediately
         inputArea.offsetHeight;
 
-        // Restore transitions after a short delay
+        // Restore transitions after a short delay with smoother values
         setTimeout(() => {
-          inputArea.style.transition = 'box-shadow var(--transition), transform var(--transition), opacity var(--transition), left var(--transition), top var(--transition)';
+          inputArea.style.transition = 'box-shadow var(--transition), transform var(--transition-slow), opacity var(--transition), left var(--transition-slow), top var(--transition-slow)';
         }, 50);
 
         console.log('Loaded saved position:', position);
@@ -269,27 +612,146 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Function to check and fix the input area's position
+  // Enhanced function to check and fix the input area's position
   const checkAndFixPosition = () => {
+    // Check if we're on a mobile device
+    const isMobile = isMobileDevice();
+
+    // For mobile devices, check if we need to keep the input area within bounds
+    if (isMobile) {
+      // Get the current position and dimensions
+      const rect = inputArea.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const inputWidth = inputArea.offsetWidth;
+      const inputHeight = inputArea.offsetHeight;
+
+      // Set appropriate margins for mobile
+      const horizontalMargin = 10;
+      const verticalMargin = 10;
+      const bottomMargin = 20; // Extra space at bottom for mobile
+
+      let needsRepositioning = false;
+      let newX = rect.left;
+      let newY = rect.top;
+
+      // Check if the input area is too far to the right
+      if (rect.right > windowWidth - horizontalMargin) {
+        newX = windowWidth - inputWidth - horizontalMargin;
+        needsRepositioning = true;
+      }
+
+      // Check if the input area is too far to the left
+      if (rect.left < horizontalMargin) {
+        newX = horizontalMargin;
+        needsRepositioning = true;
+      }
+
+      // Check if the input area is too far down
+      if (rect.bottom > windowHeight - bottomMargin) {
+        newY = windowHeight - inputHeight - bottomMargin;
+        needsRepositioning = true;
+      }
+
+      // Check if the input area is too far up
+      if (rect.top < verticalMargin) {
+        newY = verticalMargin;
+        needsRepositioning = true;
+      }
+
+      // If repositioning is needed, update the position
+      if (needsRepositioning) {
+        // Temporarily disable transitions for immediate repositioning
+        inputArea.style.transition = 'none';
+
+        // Update position
+        inputArea.style.position = 'absolute';
+        inputArea.style.left = newX + 'px';
+        inputArea.style.top = newY + 'px';
+
+        // Ensure other positioning properties are cleared
+        inputArea.style.bottom = 'auto';
+        inputArea.style.right = 'auto';
+        inputArea.style.transform = 'none';
+        inputArea.style.margin = '0';
+
+        // Force a reflow
+        inputArea.offsetHeight;
+
+        // Restore transitions
+        setTimeout(() => {
+          inputArea.style.transition = 'box-shadow var(--transition), transform var(--transition-slow), opacity var(--transition), left var(--transition-slow), top var(--transition-slow)';
+        }, 50);
+      }
+
+      return; // Exit early since we've handled mobile positioning
+    }
+
+    // For non-mobile devices, check and fix position as before
     // Get the current position and dimensions
     const rect = inputArea.getBoundingClientRect();
     const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
     const inputWidth = inputArea.offsetWidth;
+    const inputHeight = inputArea.offsetHeight;
+
+    // Set appropriate margins for desktop
+    const horizontalMargin = 10;
+    const verticalMargin = 10;
+    const bottomMargin = 10;
+
+    let needsRepositioning = false;
+    let newX = rect.left;
+    let newY = rect.top;
 
     // Check if the input area is too far to the right
-    if (rect.right > windowWidth - 10) {
-      console.log('Fixing position - too far right');
-      inputArea.style.left = (windowWidth - inputWidth - 10) + 'px';
+    if (rect.right > windowWidth - horizontalMargin) {
+      newX = windowWidth - inputWidth - horizontalMargin;
+      needsRepositioning = true;
     }
 
     // Check if the input area is too far to the left
-    if (rect.left < 10) {
-      console.log('Fixing position - too far left');
-      inputArea.style.left = '10px';
+    if (rect.left < horizontalMargin) {
+      newX = horizontalMargin;
+      needsRepositioning = true;
     }
 
-    // Log the current position
-    console.log('Position check - left:', rect.left, 'right:', windowWidth - rect.right);
+    // Check if the input area is too far down
+    if (rect.bottom > windowHeight - bottomMargin) {
+      newY = windowHeight - inputHeight - bottomMargin;
+      needsRepositioning = true;
+    }
+
+    // Check if the input area is too far up
+    if (rect.top < verticalMargin) {
+      newY = verticalMargin;
+      needsRepositioning = true;
+    }
+
+    // If repositioning is needed, update the position
+    if (needsRepositioning) {
+      // Temporarily disable transitions for immediate repositioning
+      inputArea.style.transition = 'none';
+
+      // Update position
+      inputArea.style.position = 'absolute';
+      inputArea.style.left = newX + 'px';
+      inputArea.style.top = newY + 'px';
+
+      // Ensure other positioning properties are cleared
+      inputArea.style.bottom = 'auto';
+      inputArea.style.right = 'auto';
+      inputArea.style.transform = 'none';
+      inputArea.style.margin = '0';
+
+      // Force a reflow
+      inputArea.offsetHeight;
+
+      // Restore transitions
+      setTimeout(() => {
+        inputArea.style.transition = 'box-shadow var(--transition), transform var(--transition-slow), opacity var(--transition), left var(--transition-slow), top var(--transition-slow)';
+      }, 50);
+    }
   };
 
   // Load the position after the animation completes
@@ -330,7 +792,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Reset transition after animation completes
     setTimeout(() => {
-      inputArea.style.transition = 'box-shadow var(--transition), transform var(--transition), opacity var(--transition), left var(--transition), top var(--transition)';
+      inputArea.style.transition = 'box-shadow var(--transition), transform var(--transition-slow), opacity var(--transition), left var(--transition-slow), top var(--transition-slow)';
     }, 500);
 
     // Show a confirmation tooltip
@@ -356,7 +818,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('mousemove', handleMouseMove);
   document.addEventListener('mouseup', handleMouseUp);
 
-  // Add touch support for mobile devices
+  // Enhanced touch support for mobile devices
   dragHandle.addEventListener('touchstart', (e) => {
     // Prevent default to avoid any browser handling
     e.preventDefault();
@@ -378,9 +840,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const dragHandleCenterX = dragHandleRect.left + (dragHandleRect.width / 2);
     const dragHandleCenterY = dragHandleRect.top + (dragHandleRect.height / 2);
 
-    // We want the touch to be exactly at the center of the drag handle
-    // We'll calculate the exact position to ensure the drag handle is centered under the touch
-
     // Calculate how much we need to move to center the drag handle under the touch
     const moveX = touch.clientX - dragHandleCenterX;
     const moveY = touch.clientY - dragHandleCenterY;
@@ -389,7 +848,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const newX = rect.left + moveX;
     const newY = rect.top + moveY;
 
-    // Disable transitions temporarily
+    // Disable transitions temporarily for immediate response
     inputArea.style.transition = 'none';
 
     // Always convert to absolute positioning for consistent behavior
@@ -409,6 +868,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Prevent text selection during drag
     document.body.style.userSelect = 'none';
 
+    // Add a class to the body to indicate dragging state
+    document.body.classList.add('input-dragging');
+
     // Trigger a vibration for feedback on mobile
     triggerSoftVibration();
   }, { passive: false });
@@ -420,6 +882,19 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
 
     const touch = e.touches[0];
+
+    // Calculate velocity for inertia
+    const now = Date.now();
+    const dt = Math.min(50, now - lastTimestamp); // Cap dt to avoid jumps after pauses
+
+    if (lastTimestamp > 0 && dt > 0) {
+      velocityX = 0.8 * velocityX + 0.2 * (touch.clientX - lastMouseX) / dt;
+      velocityY = 0.8 * velocityY + 0.2 * (touch.clientY - lastMouseY) / dt;
+    }
+
+    lastMouseX = touch.clientX;
+    lastMouseY = touch.clientY;
+    lastTimestamp = now;
 
     // Get the current dimensions and position of the input area
     const inputWidth = inputArea.offsetWidth;
@@ -442,7 +917,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const newY = rect.top + moveY;
 
     // Apply new position with boundaries to keep it within the viewport
-    const margin = 10;
+    const margin = 16; // Increased margin for better visibility
 
     // Calculate the maximum X and Y positions
     // Make sure we're using the actual window dimensions
@@ -454,6 +929,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const boundedX = Math.max(margin, Math.min(newX, maxX));
     const boundedY = Math.max(margin, Math.min(newY, maxY));
 
+    // Temporarily disable transitions for immediate response
+    inputArea.style.transition = 'none';
+
     // Apply the new position directly without any transforms
     // IMPORTANT: Set all position properties to ensure consistent behavior
     inputArea.style.position = 'absolute';
@@ -463,35 +941,89 @@ document.addEventListener('DOMContentLoaded', () => {
     inputArea.style.right = 'auto';
     inputArea.style.transform = 'none';
     inputArea.style.margin = '0';
+
+    // Force a reflow to ensure the browser applies these changes immediately
+    inputArea.offsetHeight;
   }, { passive: false });
 
   document.addEventListener('touchend', () => {
     if (isDragging) {
-      // End dragging state
+      // End dragging state but keep velocity for inertia
       isDragging = false;
-      inputArea.classList.remove('dragging');
-      document.body.style.userSelect = '';
+      document.body.classList.remove('input-dragging');
 
-      // Restore transitions
-      inputArea.style.transition = 'box-shadow var(--transition), transform var(--transition), opacity var(--transition), left var(--transition), top var(--transition)';
+      // Apply inertia if there's significant velocity
+      const speed = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
 
-      // Save the position to local storage
-      const position = {
-        left: inputArea.style.left,
-        top: inputArea.style.top
-      };
-      localStorage.setItem('inputAreaPosition', JSON.stringify(position));
+      if (speed > 0.1) {
+        // Get current position
+        const rect = inputArea.getBoundingClientRect();
+        const inputWidth = inputArea.offsetWidth;
+        const inputHeight = inputArea.offsetHeight;
+        const margin = 16;
 
-      console.log('Touch ended, saved position:', position);
+        // Calculate maximum bounds
+        const maxX = Math.max(0, window.innerWidth - inputWidth - margin);
+        const maxY = Math.max(0, window.innerHeight - inputHeight - margin);
+
+        // Apply inertia with damping
+        const applyInertia = () => {
+          // Reduce velocity with each frame
+          velocityX *= 0.95;
+          velocityY *= 0.95;
+
+          // Stop if velocity is too low
+          if (Math.abs(velocityX) < 0.05 && Math.abs(velocityY) < 0.05) {
+            finalizeDrag();
+            return;
+          }
+
+          // Calculate new position with inertia
+          const newX = rect.left + velocityX * 16; // Scale for smoother movement
+          const newY = rect.top + velocityY * 16;
+
+          // Ensure within bounds
+          const boundedX = Math.max(margin, Math.min(newX, maxX));
+          const boundedY = Math.max(margin, Math.min(newY, maxY));
+
+          // If we hit a boundary, stop inertia in that direction
+          if (boundedX !== newX) velocityX = 0;
+          if (boundedY !== newY) velocityY = 0;
+
+          // Update position
+          inputArea.style.left = boundedX + 'px';
+          inputArea.style.top = boundedY + 'px';
+
+          // Update rect for next iteration
+          rect.left = boundedX;
+          rect.top = boundedY;
+
+          // Continue inertia animation
+          requestAnimationFrame(applyInertia);
+        };
+
+        // Start inertia animation
+        requestAnimationFrame(applyInertia);
+      } else {
+        // No significant velocity, just finalize the drag
+        finalizeDrag();
+      }
+
+      // Check if the input area is in a valid position after inertia
+      setTimeout(checkAndFixPosition, 500);
     }
   });
 
   document.addEventListener('touchcancel', () => {
     if (isDragging) {
       isDragging = false;
-      inputArea.classList.remove('dragging');
-      document.body.style.userSelect = '';
-      console.log('Touch cancelled');
+      document.body.classList.remove('input-dragging');
+
+      // Just finalize the drag without inertia
+      finalizeDrag();
+
+      // Check position in case it was left in an invalid state
+      checkAndFixPosition();
     }
   });
 
@@ -567,11 +1099,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Function to check if the user is on a mobile device
+  // Enhanced function to check if the user is on a mobile device
   function isMobileDevice() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-           (navigator.maxTouchPoints && navigator.maxTouchPoints > 2);
+           (navigator.maxTouchPoints && navigator.maxTouchPoints > 2) ||
+           window.matchMedia("(max-width: 480px)").matches;
   }
+
+  // Note: We're always centering the input area on mobile now, regardless of orientation
 
   // Function to trigger a soft vibration on mobile devices
   function triggerSoftVibration() {
@@ -764,13 +1299,19 @@ document.addEventListener('DOMContentLoaded', () => {
       chatMessages.removeChild(loadingElement);
 
       if (!response.ok) {
-        const errorData = await response.json();
+        try {
+          const errorData = await response.json();
 
-        // Check if it's a rate limit error
-        if (response.status === 429 && errorData.message) {
-          throw new Error('rate limit: ' + errorData.message);
-        } else {
-          throw new Error(errorData.error || 'Failed to get response');
+          // Check if it's a rate limit error
+          if (response.status === 429 && errorData.message) {
+            throw new Error('rate limit: ' + errorData.message);
+          } else {
+            throw new Error(errorData.error || 'Failed to get response');
+          }
+        } catch (parseError) {
+          // If we can't parse the response as JSON, it might be HTML
+          console.error('Error parsing response:', parseError);
+          throw new Error(`Server error (${response.status}): Please check your API key and server configuration`);
         }
       }
 
@@ -988,9 +1529,53 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 150);
   };
 
-  // Function to toggle panel expansion
+  // Enhanced function to toggle panel expansion
   const togglePanelExpansion = () => {
+    // Toggle the expanded class
     infoPanel.classList.toggle('expanded');
+
+    // Update the expand button icon and title based on state
+    if (infoPanel.classList.contains('expanded')) {
+      expandPanel.title = 'Exit full screen';
+      expandPanel.setAttribute('aria-label', 'Exit full screen');
+      // Reset any custom width when expanding to full screen
+      infoPanel.style.width = '';
+
+      // Show a minimal visual indicator for dragging
+      const dragHint = document.createElement('div');
+      dragHint.className = 'drag-hint';
+      infoPanel.appendChild(dragHint);
+
+      // Make the hint visible
+      setTimeout(() => {
+        if (dragHint.parentNode) {
+          dragHint.style.opacity = '1';
+        }
+      }, 300);
+
+      // Remove the hint after a few seconds
+      setTimeout(() => {
+        if (dragHint.parentNode) {
+          dragHint.style.opacity = '0';
+          setTimeout(() => {
+            if (dragHint.parentNode) {
+              dragHint.parentNode.removeChild(dragHint);
+            }
+          }, 500);
+        }
+      }, 4000);
+    } else {
+      expandPanel.title = 'Expand to full screen';
+      expandPanel.setAttribute('aria-label', 'Expand to full screen');
+      // Reset to default panel width when collapsing
+      infoPanel.style.width = '';
+
+      // Remove any existing drag hints
+      const existingHint = infoPanel.querySelector('.drag-hint');
+      if (existingHint) {
+        existingHint.parentNode.removeChild(existingHint);
+      }
+    }
 
     // Trigger a subtle vibration when panel expands/collapses (mobile only)
     triggerSoftVibration();
@@ -1019,7 +1604,7 @@ document.addEventListener('DOMContentLoaded', () => {
     triggerSoftVibration();
   };
 
-  // Function to handle panel resizing
+  // Enhanced function to handle panel resizing with full screen toggle
   const resizePanel = (e) => {
     if (!isResizing) return;
 
@@ -1027,21 +1612,54 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!currentX) return;
 
     const diff = currentX - startX;
+    const isExpanded = infoPanel.classList.contains('expanded');
 
-    // Calculate new width (moving right increases width)
-    let newWidth = startWidth + diff;
+    // Handle differently based on whether we're in full screen mode or not
+    if (isExpanded) {
+      // In full screen mode, detect leftward drag to exit full screen
+      if (diff < -50) { // Threshold to exit full screen
+        // Exit full screen mode
+        infoPanel.classList.remove('expanded');
 
-    // Enforce min/max constraints
-    newWidth = Math.max(minWidth, Math.min(newWidth, maxWidth));
+        // Update the expand button icon and title
+        expandPanel.title = 'Expand to full screen';
+        expandPanel.setAttribute('aria-label', 'Expand to full screen');
 
-    // Apply the new width
-    infoPanel.style.width = `${newWidth}px`;
+        // Set width to default panel width
+        infoPanel.style.width = `${minWidth}px`;
 
-    // If width is close to max, automatically expand to full screen
-    if (newWidth > maxWidth * 0.9) {
-      infoPanel.classList.add('expanded');
-      isResizing = false;
-      document.body.classList.remove('resizing');
+        // Reset resizing state
+        isResizing = false;
+        document.body.classList.remove('resizing');
+
+        // Provide haptic feedback
+        triggerSoftVibration();
+        return;
+      }
+    } else {
+      // Normal resizing mode
+      // Calculate new width (moving right increases width)
+      let newWidth = startWidth + diff;
+
+      // Enforce min/max constraints
+      newWidth = Math.max(minWidth, Math.min(newWidth, maxWidth));
+
+      // Apply the new width
+      infoPanel.style.width = `${newWidth}px`;
+
+      // If width is close to max, automatically expand to full screen
+      if (newWidth > maxWidth * 0.9) {
+        infoPanel.classList.add('expanded');
+        isResizing = false;
+        document.body.classList.remove('resizing');
+
+        // Update the expand button icon and title
+        expandPanel.title = 'Exit full screen';
+        expandPanel.setAttribute('aria-label', 'Exit full screen');
+
+        // Provide haptic feedback
+        triggerSoftVibration();
+      }
     }
 
     // Prevent default to avoid scrolling on mobile
@@ -1057,15 +1675,60 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Open panel when info button is clicked
-  infoButton.addEventListener('click', openPanel);
+  infoButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openPanel();
+  });
+
+  // Also handle touch events for the info button
+  infoButton.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openPanel();
+  }, { passive: false });
 
   // Close panel when close button is clicked
-  closePanel.addEventListener('click', closeInfoPanel);
+  closePanel.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    closeInfoPanel();
+  });
+
+  // Also handle touch events for the close button
+  closePanel.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    closeInfoPanel();
+  }, { passive: false });
 
   // Toggle expansion when expand button is clicked
-  expandPanel.addEventListener('click', togglePanelExpansion);
+  expandPanel.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    togglePanelExpansion();
+  });
+
+  // Also handle touch events for the expand button
+  expandPanel.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    togglePanelExpansion();
+  }, { passive: false });
 
   // Close panel when overlay is clicked
+  panelOverlay.addEventListener('click', (e) => {
+    e.preventDefault();
+    closeInfoPanel();
+    triggerSoftVibration();
+  });
+
+  // Also handle touch events for the overlay
+  panelOverlay.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    closeInfoPanel();
+    triggerSoftVibration();
+  });
 
   // Event listeners for panel resizing
   panelDragHandle.addEventListener('mousedown', startResize);
@@ -1084,8 +1747,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Close panel when clicking on the overlay
-  panelOverlay.addEventListener('click', closeInfoPanel);
+  // Panel overlay click handler already added above
 
   // Close panel when pressing Escape key
   document.addEventListener('keydown', (e) => {

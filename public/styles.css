@@ -5,18 +5,18 @@
 }
 
 :root {
-  /* Colors - dark mode with Llama-themed accents */
+  /* Colors - Synthara AI color scheme */
   --text-primary: rgba(255, 255, 255, 0.92);
   --text-secondary: rgba(255, 255, 255, 0.68);
   --bg-primary: #121212;
   --bg-secondary: #1e1e1e;
   --bg-tertiary: #252525;
-  --accent: #4682b4;
-  --accent-light: rgba(70, 130, 180, 0.15);
-  --accent-dark: #36648b;
-  --gradient-1: #4682b4;
-  --gradient-2: #5f9ea0;
-  --gradient-3: #6495ed;
+  --accent: #3366cc; /* Primary brand color - blue */
+  --accent-light: rgba(51, 102, 204, 0.15);
+  --accent-dark: #254b99;
+  --gradient-1: #3366cc; /* Blue */
+  --gradient-2: #5588dd; /* Mid blue */
+  --gradient-3: #ff8c00; /* Orange accent */
   --border-color: #333333;
 
   /* Spacing - using the 8-point grid system for harmony */
@@ -25,20 +25,23 @@
   --spacing-md: 24px;
   --spacing-lg: 32px;
 
-  /* Typography - refined for absolute clarity and reasoning */
+  /* Typography - refined for absolute clarity with zero noise */
   --font-weight-light: 300;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-size: 14px;
-  --line-height: 1.5; /* Optimal for logical flow */
-  --letter-spacing: -0.02em; /* Tightened for cleaner appearance */
-  --word-spacing: 0.01em; /* Minimized for cleaner text flow */
-  --paragraph-spacing: 1.4em; /* Optimized for logical separation */
+  --font-size-sm: 13px;
+  --font-size-xs: 12px;
+  --line-height: 1.5; /* Perfect for readability */
+  --letter-spacing: -0.01em; /* Subtle refinement for cleaner text */
+  --paragraph-spacing: 1.5em; /* Golden ratio spacing */
+  --text-rendering: optimizeLegibility; /* Enhanced text clarity */
 
-  /* Animation - minimal and precise */
-  --transition: 200ms cubic-bezier(0.3, 0, 0.2, 1); /* Faster, more precise transitions */
-  --wave-duration: 1s; /* Faster wave animation for reasoning flow */
-  --char-delay: 30ms; /* Faster character delay */
+  /* Animation - smoother and more relaxed */
+  --transition: 300ms cubic-bezier(0.25, 0.1, 0.25, 1); /* Smoother, more relaxed transitions */
+  --transition-slow: 400ms cubic-bezier(0.25, 0.1, 0.25, 1); /* Slower version for larger elements */
+  --wave-duration: 1.2s; /* Slightly slower wave animation for a more relaxed feel */
+  --char-delay: 35ms; /* Slightly slower character delay */
 
   /* UI Elements - absolute minimal proportions */
   --message-radius: 10px; /* Minimal radius for cleaner look */
@@ -53,6 +56,11 @@ html, body {
   height: 100%;
   width: 100%;
   overflow: hidden;
+  /* Support for notched devices */
+  padding-top: env(safe-area-inset-top, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
 }
 
 body {
@@ -61,16 +69,41 @@ body {
   font-weight: var(--font-weight-light);
   line-height: var(--line-height);
   color: var(--text-primary);
-  background-color: var(--bg-primary);
-  background-image: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  background: linear-gradient(180deg,
+    rgba(18, 18, 18, 1) 0%,
+    rgba(18, 18, 18, 1) 50%,
+    rgba(18, 18, 18, 0.8) 70%,
+    rgba(51, 102, 204, 0.25) 80%, /* Blue - more subtle */
+    rgba(51, 102, 204, 0.25) 83%,
+    rgba(85, 136, 221, 0.25) 84%, /* Mid blue - more subtle */
+    rgba(85, 136, 221, 0.25) 87%,
+    rgba(255, 140, 0, 0.25) 88%, /* Orange - more subtle */
+    rgba(255, 140, 0, 0.3) 100%
+  );
+  background-color: var(--bg-primary); /* Fallback */
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: var(--letter-spacing);
-  word-spacing: var(--word-spacing);
-  text-rendering: optimizeLegibility;
-  font-feature-settings: "kern" 1, "liga" 1, "calt" 1; /* Further simplified for cleaner rendering */
+  text-rendering: var(--text-rendering);
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ss01" 1, "ss02" 1;
   overflow: hidden;
+  min-height: 100vh;
+}
+
+/* Light footer gradient for incognito mode - Synthara style */
+body.incognito-mode {
+  background: linear-gradient(180deg,
+    rgba(18, 18, 18, 1) 0%,
+    rgba(18, 18, 18, 1) 50%,
+    rgba(18, 18, 18, 0.9) 70%,
+    rgba(220, 230, 255, 0.15) 80%, /* Light blue tint - more subtle */
+    rgba(220, 230, 255, 0.15) 83%,
+    rgba(235, 240, 255, 0.15) 84%, /* Lighter blue tint - more subtle */
+    rgba(235, 240, 255, 0.15) 87%,
+    rgba(255, 245, 235, 0.15) 88%, /* Light orange-white tint - more subtle */
+    rgba(255, 245, 235, 0.2) 100%
+  );
 }
 
 
@@ -96,67 +129,168 @@ main {
   overflow: hidden;
 }
 
-/* Privacy badge */
+/* Privacy badge - minimal design */
 .privacy-badge {
   position: relative;
   margin: 18px auto 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  background-color: rgba(30, 30, 30, 0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  padding: 6px 12px;
-  border-radius: 20px;
+  gap: 6px; /* Slightly tighter spacing */
+  background-color: transparent; /* Remove background */
+  padding: 4px 10px; /* Slightly smaller padding */
+  border-radius: 16px; /* Smaller radius */
   z-index: 100;
-  border: 1px solid rgba(138, 133, 255, 0.15);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  border: none; /* Remove border */
+  transition: opacity 0.3s ease;
   cursor: default;
-  opacity: 0.8;
+  opacity: 0.7; /* Slightly transparent by default */
   width: fit-content;
+}
+
+/* Incognito mode privacy badge - minimal design */
+.incognito-mode .privacy-badge {
+  /* No special styling needed for minimal design */
+  opacity: 0.75; /* Slightly more visible in incognito mode */
+}
+
+/* Incognito toggle button - minimal design */
+.incognito-toggle {
+  position: absolute;
+  top: 18px;
+  left: 60px; /* Move to the right of the info button */
+  width: 32px; /* Slightly smaller */
+  height: 32px; /* Slightly smaller */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent; /* Remove background */
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 100;
+  border: none; /* Remove border */
+  transition: opacity 0.2s ease;
+  opacity: 0.7; /* Slightly transparent by default */
+}
+
+.incognito-toggle:hover {
+  opacity: 1; /* Full opacity on hover */
+}
+
+.incognito-toggle:active {
+  opacity: 0.9; /* Slight feedback on click */
+}
+
+/* Adjust hover effect for mobile to maintain centering */
+@media (max-width: 480px) {
+  .incognito-toggle:hover {
+    opacity: 1;
+  }
+
+  .incognito-toggle:active {
+    opacity: 0.9;
+  }
+}
+
+.incognito-icon {
+  opacity: 0.9; /* Subtle transparency */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.incognito-icon svg {
+  stroke: currentColor;
+  fill: none;
+  width: 14px;
+  height: 14px;
+  opacity: 0.9;
+}
+
+/* Position the incognito toggle on mobile */
+@media (max-width: 480px) {
+  .incognito-toggle {
+    top: 16px; /* Align with info button */
+    left: 58px; /* Position to the right of info button */
+    width: 32px;
+    height: 32px;
+    z-index: 201; /* Ensure it's above other elements */
+    transform: none; /* Remove transform */
+  }
+
+  .incognito-icon {
+    font-size: 16px;
+  }
+
+  /* Keep the info button in its original position */
+  #info-button {
+    /* Original position is maintained */
+  }
+
+  /* No need to adjust privacy badge margin anymore */
+  .privacy-badge {
+    margin-top: 18px; /* Reset to original */
+  }
+}
+
+/* Small phones (up to 360px) */
+@media (max-width: 360px) {
+  .incognito-toggle {
+    top: 12px; /* Align with info button */
+    left: 50px; /* Position to the right of info button */
+    width: 28px; /* Slightly smaller */
+    height: 28px; /* Slightly smaller */
+  }
+
+  #info-button {
+    top: 12px;
+    left: 12px;
+    width: 28px; /* Slightly smaller */
+    height: 28px; /* Slightly smaller */
+  }
+
+  /* No need to adjust privacy badge margin */
+  .privacy-badge {
+    margin-top: 16px; /* Slightly less margin */
+  }
 }
 
 .privacy-badge:hover {
   opacity: 1;
-  transform: scale(1.02);
+  /* Remove scale effect for cleaner look */
 }
 
 .privacy-badge.pinned {
-  background-color: rgba(70, 130, 180, 0.15);
-  border-color: rgba(70, 130, 180, 0.3);
+  /* Minimal styling for pinned state */
   opacity: 1;
+  text-decoration: underline; /* Simple underline to indicate pinned state */
+  text-decoration-thickness: 1px; /* Thin underline */
+  text-underline-offset: 2px; /* Space between text and underline */
 }
 
-/* Llama badge pulse animation */
+/* Minimal badge pulse animation */
 .privacy-badge.pulse {
-  animation: badgePulse 2s ease-in-out;
-  background-color: rgba(70, 130, 180, 0.2);
-  border-color: rgba(70, 130, 180, 0.4);
+  animation: subtlePulse 2s ease-in-out;
   opacity: 1;
 }
 
+/* Add the new subtle pulse animation */
+@keyframes subtlePulse {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Keep the old animation for backward compatibility */
 @keyframes badgePulse {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 2px 10px rgba(70, 130, 180, 0.1);
+  0%, 100% {
+    opacity: 0.8;
   }
-  20% {
-    transform: scale(1.03);
-    box-shadow: 0 2px 15px rgba(70, 130, 180, 0.3);
-  }
-  40% {
-    transform: scale(1);
-    box-shadow: 0 2px 10px rgba(70, 130, 180, 0.1);
-  }
-  60% {
-    transform: scale(1.03);
-    box-shadow: 0 2px 15px rgba(70, 130, 180, 0.3);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  50% {
+    opacity: 1;
   }
 }
 
@@ -174,21 +308,35 @@ main {
 }
 
 .privacy-icon {
-  font-size: 14px;
-  color: rgba(70, 130, 180, 0.9);
+  opacity: 0.85; /* Subtle transparency */
+  color: var(--text-primary); /* Use primary text color */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+.privacy-icon svg {
+  stroke: currentColor;
+  fill: none;
+  width: 14px;
+  height: 14px;
+  opacity: 0.9;
 }
 
 .privacy-text {
-  font-size: 12px;
-  color: var(--text-secondary);
+  font-size: 11px; /* Even smaller text */
+  color: var(--text-primary); /* Use primary text color */
   font-weight: var(--font-weight-light);
-  letter-spacing: -0.01em;
+  letter-spacing: 0; /* No letter spacing */
   white-space: nowrap;
-  transition: color 0.3s ease;
+  transition: opacity 0.3s ease;
+  opacity: 0.85; /* Subtle transparency */
 }
 
 .privacy-badge.pulse .privacy-text {
-  color: rgba(70, 130, 180, 1);
+  opacity: 1; /* Full opacity when pulsing */
 }
 
 /* Fade overlays removed for cleaner look */
@@ -202,20 +350,19 @@ main {
   padding: var(--spacing-md);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg); /* Increased spacing between messages for better readability */
   scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.08) transparent;
+  scrollbar-color: rgba(255,255,255,0.05) transparent; /* More subtle scrollbar */
   width: 100%;
   position: relative;
-  /* Standard padding now that fade overlays are removed */
-  padding-top: var(--spacing-md);
-  padding-bottom: var(--spacing-xl);
+  padding-top: var(--spacing-lg); /* More breathing room at top */
+  padding-bottom: calc(var(--spacing-xl) + 10px); /* More breathing room at bottom */
   margin-top: 0;
 }
 
-/* Webkit scrollbar styling */
+/* Webkit scrollbar styling - ultra minimal */
 #chat-messages::-webkit-scrollbar {
-  width: 3px;
+  width: 2px; /* Thinner scrollbar */
 }
 
 #chat-messages::-webkit-scrollbar-track {
@@ -223,57 +370,59 @@ main {
 }
 
 #chat-messages::-webkit-scrollbar-thumb {
-  background-color: rgba(255,255,255,0.08);
-  border-radius: 3px;
+  background-color: rgba(255,255,255,0.05); /* More subtle scrollbar */
+  border-radius: 2px; /* Consistent with width */
 }
 
 .message {
-  max-width: 75%; /* Slightly narrower for better readability */
-  padding: var(--spacing-md);
-  border-radius: var(--message-radius);
+  max-width: 70%; /* Narrower for better readability */
+  padding: var(--spacing-md) var(--spacing-lg); /* More horizontal padding */
+  border-radius: 12px; /* Consistent radius */
   line-height: var(--line-height);
   position: relative;
   font-weight: var(--font-weight-light);
   letter-spacing: var(--letter-spacing);
-  word-spacing: var(--word-spacing);
   white-space: normal;
   word-wrap: break-word;
   transition: opacity var(--transition);
-  backdrop-filter: blur(5px); /* Reduced blur for cleaner look */
-  -webkit-backdrop-filter: blur(5px);
-  margin-bottom: var(--spacing-sm);
+  backdrop-filter: blur(4px); /* Reduced blur for cleaner look */
+  -webkit-backdrop-filter: blur(4px);
+  margin-bottom: 0; /* No bottom margin, using gap instead */
   border: none;
-  box-shadow: none; /* Removed shadow for cleaner look */
+  box-shadow: none; /* No shadow for cleaner look */
+  text-rendering: var(--text-rendering);
 }
 
 .user-message {
   align-self: flex-end;
-  background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+  background: linear-gradient(135deg, rgba(51, 102, 204, 0.9), rgba(85, 136, 221, 0.9)); /* Slightly more transparent */
   color: white;
-  box-shadow: 0 1px 4px rgba(138, 133, 255, 0.1); /* Even more subtle glow */
+  box-shadow: none; /* No shadow for cleaner look */
 }
 
 .ai-message {
   align-self: flex-start;
-  background-color: rgba(30, 30, 30, 0.25); /* More transparent for cleaner look */
+  background-color: rgba(30, 30, 30, 0.2); /* More transparent for cleaner look */
   color: var(--text-primary);
   border: none;
 }
 
-/* Rate limit error message styling */
+/* Rate limit error message styling - ultra minimal */
 .rate-limit-message {
   align-self: center;
-  max-width: 90%;
-  background-color: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
-  border-radius: var(--message-radius);
-  padding: var(--spacing-md);
-  margin: var(--spacing-md) 0;
-  font-size: 14px;
-  line-height: 1.7;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  max-width: 85%;
+  background-color: rgba(0, 0, 0, 0.2); /* More subtle background */
+  border: 1px solid rgba(255, 255, 255, 0.05); /* More subtle border */
+  color: rgba(255, 255, 255, 0.75);
+  border-radius: 12px; /* Consistent radius */
+  padding: var(--spacing-md) var(--spacing-lg); /* More horizontal padding */
+  margin: var(--spacing-lg) 0; /* More vertical spacing */
+  font-size: var(--font-size-sm); /* Use variable */
+  line-height: 1.6; /* Slightly tighter */
+  backdrop-filter: blur(4px); /* Reduced blur */
+  -webkit-backdrop-filter: blur(4px);
+  letter-spacing: var(--letter-spacing); /* Consistent with other text */
+  text-rendering: var(--text-rendering);
 }
 
 .rate-limit-message a {
@@ -283,27 +432,26 @@ main {
   transition: all var(--transition);
 }
 
-/* Markdown message styling */
+/* Markdown message styling - refined for zero visual noise */
 .markdown-message {
   display: flex;
   flex-direction: column;
-  gap: 0.5em;
-}
-
-.markdown-message .wave-text {
-  display: inline-block;
-  margin-bottom: 0.5em;
-}
-
-.markdown-message .wave-text:last-child {
-  margin-bottom: 0;
-}
-
-.markdown-message {
+  gap: 0.6em; /* Golden ratio spacing */
   font-size: var(--font-size);
   line-height: var(--line-height);
   overflow-wrap: break-word;
   word-wrap: break-word;
+  letter-spacing: var(--letter-spacing);
+  text-rendering: var(--text-rendering);
+}
+
+.markdown-message .wave-text {
+  display: inline-block;
+  margin-bottom: 0.6em; /* Golden ratio spacing */
+}
+
+.markdown-message .wave-text:last-child {
+  margin-bottom: 0;
 }
 
 .markdown-message h1,
@@ -312,8 +460,8 @@ main {
 .markdown-message h4,
 .markdown-message h5,
 .markdown-message h6 {
-  margin-top: 1.2em;
-  margin-bottom: 0.5em;
+  margin-top: 1.5em; /* Golden ratio spacing */
+  margin-bottom: 0.6em; /* Golden ratio spacing */
   font-weight: var(--font-weight-medium);
   background: linear-gradient(90deg, var(--gradient-1), var(--gradient-2));
   -webkit-background-clip: text;
@@ -321,6 +469,8 @@ main {
   -webkit-text-fill-color: transparent;
   color: transparent; /* Fallback */
   display: inline-block;
+  letter-spacing: -0.02em; /* Tighter for headings */
+  line-height: 1.3; /* Tighter for headings */
 }
 
 .markdown-message h1 { font-size: 1.4em; }
@@ -346,79 +496,93 @@ main {
 
 .markdown-message pre,
 .markdown-message .code-block-container pre {
-  margin: 0.8em 0;
+  margin: 0.6em 0 0.9em; /* Golden ratio spacing */
   padding: 1em;
-  border-radius: 6px;
-  background-color: rgba(30, 30, 30, 0.6) !important;
+  border-radius: 8px; /* Consistent radius */
+  background-color: rgba(30, 30, 30, 0.5) !important; /* Slightly more subtle */
   overflow-x: auto;
   position: relative;
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-  font-size: 0.9em;
+  font-size: var(--font-size-xs); /* Use variable */
+  border: 1px solid rgba(255, 255, 255, 0.03); /* Subtle border */
 }
 
 .markdown-message .code-block-container {
-  margin: 0.5em 0 1em 0;
+  margin: 0.6em 0 0.9em; /* Golden ratio spacing */
 }
 
 .markdown-message code {
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-  font-size: 0.9em;
-  border-radius: 3px;
+  font-size: var(--font-size-xs); /* Use variable */
+  border-radius: 4px; /* Consistent radius */
   padding: 0.1em 0.3em;
-  background-color: rgba(30, 30, 30, 0.3);
+  background-color: rgba(30, 30, 30, 0.25); /* More subtle */
+  letter-spacing: 0; /* No letter spacing for code */
 }
 
 .markdown-message pre code {
   padding: 0;
   background-color: transparent;
   border-radius: 0;
-  font-size: 0.9em;
+  font-size: var(--font-size-xs); /* Use variable */
   line-height: 1.5;
   tab-size: 2;
   white-space: pre;
+  letter-spacing: 0; /* No letter spacing for code */
 }
 
 .markdown-message a {
   color: var(--accent);
   text-decoration: none;
-  border-bottom: 1px dotted var(--accent);
-  transition: border-bottom-color var(--transition), opacity var(--transition);
+  border-bottom: 1px dotted rgba(51, 102, 204, 0.5); /* More subtle border */
+  transition: all var(--transition);
+  padding-bottom: 1px; /* Consistent spacing */
 }
 
 .markdown-message a:hover {
-  opacity: 0.8;
+  opacity: 0.9; /* More subtle hover effect */
   border-bottom-color: transparent;
 }
 
 .markdown-message blockquote {
-  border-left: 3px solid rgba(138, 133, 255, 0.5);
-  padding-left: 1em;
-  margin-left: 0;
-  margin-right: 0;
+  border-left: 2px solid rgba(51, 102, 204, 0.4); /* Thinner, more subtle border */
+  padding-left: 0.9em; /* Golden ratio spacing */
+  margin: 0.6em 0; /* Golden ratio spacing */
   font-style: italic;
   color: var(--text-secondary);
+  background-color: rgba(30, 30, 30, 0.2); /* Very subtle background */
+  padding: 0.6em 0.9em 0.6em 1em; /* Golden ratio spacing */
+  border-radius: 4px; /* Consistent radius */
 }
 
 .markdown-message table {
   border-collapse: collapse;
   width: 100%;
-  margin: 1em 0;
+  margin: 0.9em 0; /* Golden ratio spacing */
+  border-radius: 8px; /* Consistent radius */
+  overflow: hidden; /* For border-radius to work */
+  font-size: var(--font-size-sm); /* Slightly smaller for tables */
 }
 
 .markdown-message th,
 .markdown-message td {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 0.5em;
+  border: 1px solid rgba(255, 255, 255, 0.05); /* More subtle border */
+  padding: 0.6em; /* Golden ratio spacing */
   text-align: left;
 }
 
 .markdown-message th {
-  background-color: rgba(30, 30, 30, 0.3);
+  background-color: rgba(30, 30, 30, 0.25); /* More subtle background */
+  font-weight: var(--font-weight-medium); /* Consistent weight */
+}
+
+.markdown-message tr:nth-child(even) {
+  background-color: rgba(30, 30, 30, 0.1); /* Subtle alternating rows */
 }
 
 .markdown-message hr {
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.05); /* More subtle border */
   margin: 1.5em 0;
 }
 
@@ -463,22 +627,30 @@ main {
   justify-content: center;
   z-index: 50;
   cursor: default;
-  transition: opacity var(--transition), left var(--transition), top var(--transition), background-color var(--transition), transform var(--transition);
+  transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+              left 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+              top 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+              background-color 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+              transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+              box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+              border 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
   border-radius: var(--input-radius);
   opacity: 0;
-  animation: fadeIn 0.4s ease forwards 0.3s; /* Fade in animation without upward movement */
+  animation: fadeIn 0.4s cubic-bezier(0.25, 0.1, 0.25, 1) forwards 0.3s; /* Improved fade in animation */
   touch-action: none;
-  will-change: opacity, transform;
+  will-change: opacity, transform, left, top;
   right: auto;
   margin: 0;
   box-sizing: border-box;
   background-color: transparent;
+  border: 1px solid transparent;
 }
 
-/* Style for when the input is focused */
+/* Style for when the input is focused - ultra minimal */
 .input-area:has(#user-input:focus) {
-  background-color: rgba(30, 30, 30, 0.1); /* Even more subtle background when active */
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); /* More subtle shadow when active */
+  background-color: rgba(30, 30, 30, 0.05); /* Nearly invisible background when active */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.03); /* Nearly invisible shadow when active */
+  border: 1px solid rgba(255, 255, 255, 0.03); /* Nearly invisible border */
 }
 
 @keyframes fadeInUp {
@@ -502,87 +674,111 @@ main {
 }
 
 .input-area.dragging {
-  box-shadow: 0 0 20px rgba(138, 133, 255, 0.25); /* More visible glow when dragging */
-  background-color: rgba(30, 30, 30, 0.4); /* Slightly darker when dragging */
-  backdrop-filter: blur(8px); /* Reduced blur for cleaner look */
+  box-shadow: 0 0 25px rgba(70, 130, 180, 0.2); /* Softer glow when dragging */
+  background-color: rgba(30, 30, 30, 0.4); /* Slightly lighter for a more subtle effect */
+  backdrop-filter: blur(8px); /* Slightly reduced blur for smoother appearance */
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(138, 133, 255, 0.15); /* More visible border when dragging */
+  border: 1px solid rgba(70, 130, 180, 0.2); /* More subtle border when dragging */
+  transform: scale(1.01); /* More subtle scale effect when dragging */
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1); /* Smoother, more relaxed transition */
 }
 
 .drag-handle {
-  width: 30px; /* Minimal width for cleaner look */
-  height: 3px; /* Minimal height for cleaner look */
-  background-color: rgba(255, 255, 255, 0.12); /* Slightly more visible */
-  border-radius: 1.5px; /* Smaller radius */
+  width: 40px; /* Wider for better visibility */
+  height: 4px; /* Taller for better visibility */
+  background-color: rgba(255, 255, 255, 0.15); /* Slightly more subtle by default */
+  border-radius: 2px; /* Slightly larger radius */
   margin: 0 auto var(--spacing-xs);
   cursor: grab;
-  transition: background-color var(--transition), opacity var(--transition), width var(--transition);
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1); /* Smoother, more relaxed transition */
   touch-action: none;
   position: relative;
   z-index: 2;
-  opacity: 0.6; /* Slightly more visible by default */
+  opacity: 0.6; /* Slightly more subtle by default */
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.08); /* More subtle glow */
 }
 
 /* Add a center point indicator to help with precise positioning */
 .drag-handle::after {
   content: '';
   position: absolute;
-  width: 4px;
-  height: 4px;
-  background-color: rgba(138, 133, 255, 0.5);
+  width: 6px;
+  height: 6px;
+  background-color: rgba(70, 130, 180, 0.7);
   border-radius: 50%;
-  top: -0.5px; /* Center vertically */
+  top: -1px; /* Center vertically */
   left: 50%;
   transform: translateX(-50%);
   opacity: 0;
-  transition: opacity var(--transition);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 4px rgba(70, 130, 180, 0.5);
+}
+
+.input-area:hover .drag-handle::after {
+  opacity: 0.5;
 }
 
 .input-area.dragging .drag-handle::after {
   opacity: 1;
+  width: 8px;
+  height: 8px;
+  box-shadow: 0 0 8px rgba(70, 130, 180, 0.8);
 }
 
 /* Add a larger invisible touch target for mobile */
 .drag-handle::before {
   content: '';
   position: absolute;
-  top: -15px;
-  left: -15px;
-  right: -15px;
-  bottom: -15px;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
   z-index: 1;
   cursor: grab;
 }
 
 /* Add a subtle tooltip on hover to indicate draggability */
-.drag-handle:hover::after {
-  content: 'Drag';
+.drag-handle:hover + .drag-tooltip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.drag-tooltip {
   position: absolute;
-  top: -25px;
+  top: -30px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, 10px);
   background-color: rgba(30, 30, 30, 0.8);
   color: var(--text-primary);
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: 4px;
   font-size: 12px;
-  opacity: 0.9;
+  opacity: 0;
   pointer-events: none;
   white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 100;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .input-area:hover .drag-handle {
-  background-color: rgba(255, 255, 255, 0.18); /* More visible on hover */
-  opacity: 0.8; /* More visible on hover */
-  width: 35px; /* Slightly wider on hover for better feedback */
+  background-color: rgba(255, 255, 255, 0.2); /* Slightly more visible on hover but still subtle */
+  opacity: 0.8; /* More visible on hover but not too prominent */
+  width: 45px; /* Slightly wider on hover for subtle feedback */
+  transform: translateY(-1px); /* Subtle lift effect */
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1); /* Softer glow on hover */
 }
 
 .input-area.dragging .drag-handle {
-  background-color: rgba(138, 133, 255, 0.5); /* More visible when dragging */
+  background-color: rgba(70, 130, 180, 0.5); /* More visible when dragging but softer */
   cursor: grabbing;
-  opacity: 1; /* Full opacity when dragging */
-  width: 40px; /* Wider when dragging for better feedback */
-  box-shadow: 0 0 5px rgba(138, 133, 255, 0.3); /* Subtle glow when dragging */
+  opacity: 0.9; /* High but not full opacity for a softer look */
+  width: 50px; /* Wider when dragging but not too dramatic */
+  box-shadow: 0 0 8px rgba(70, 130, 180, 0.3); /* Softer glow when dragging */
+  transform: translateY(-1px); /* Less pronounced lift effect for smoother feel */
 }
 
 .tooltip {
@@ -659,7 +855,7 @@ main {
   width: 100%;
   padding: var(--spacing-xs); /* Minimal padding */
   border: none;
-  background-color: rgba(30, 30, 30, 0.2); /* Even more transparent */
+  background-color: rgba(30, 30, 30, 0.15); /* Even more transparent */
   font-family: inherit;
   font-size: var(--font-size);
   font-weight: var(--font-weight-light);
@@ -667,14 +863,14 @@ main {
   min-height: 36px; /* Minimal initial height */
   max-height: 120px;
   outline: none;
-  border-radius: var(--input-radius);
-  transition: background-color var(--transition), border var(--transition), height var(--transition);
+  border-radius: 12px; /* Slightly reduced radius */
+  transition: all var(--transition);
   box-shadow: none;
   letter-spacing: var(--letter-spacing);
-  word-spacing: var(--word-spacing);
   caret-color: var(--accent);
   color: var(--text-primary);
-  backdrop-filter: blur(5px); /* Reduced blur for cleaner look */
+  backdrop-filter: blur(4px); /* Reduced blur for cleaner look */
+  text-rendering: var(--text-rendering);
   -webkit-backdrop-filter: blur(5px);
   text-align: center;
   position: relative;
@@ -696,19 +892,19 @@ main {
   transition: opacity var(--transition);
 }
 
-/* Style for inactive input */
+/* Style for inactive input - ultra minimal */
 #user-input:not(:focus) {
   caret-color: transparent; /* Hide cursor when not focused */
-  background-color: rgba(30, 30, 30, 0.15); /* Even more transparent when not focused */
+  background-color: rgba(30, 30, 30, 0.1); /* Nearly invisible when not focused */
   cursor: pointer; /* Show pointer cursor when hovering over inactive input */
 }
 
-/* Style for active input */
+/* Style for active input - ultra minimal */
 #user-input:focus {
-  background-color: rgba(30, 30, 30, 0.25); /* Subtle background when focused */
+  background-color: rgba(30, 30, 30, 0.15); /* Very subtle background when focused */
   text-align: center;
   box-shadow: none; /* No glow for cleaner look */
-  border: 1px solid rgba(138, 133, 255, 0.15); /* More subtle border when focused */
+  border: 1px solid rgba(51, 102, 204, 0.1); /* Nearly invisible border when focused */
   cursor: text; /* Show text cursor when input is active */
   caret-color: var(--accent); /* Show the cursor with accent color when focused */
 }
@@ -719,17 +915,17 @@ main {
 
 #user-input::placeholder {
   color: var(--text-secondary);
-  opacity: 0.4; /* More visible for rotating placeholders */
+  opacity: 0.35; /* Subtle but still readable */
   font-weight: var(--font-weight-light);
   font-style: normal;
-  transition: opacity 0.5s ease, color 0.5s ease;
+  transition: opacity 0.6s ease, color 0.6s ease;
   text-align: center;
   letter-spacing: var(--letter-spacing); /* Consistent with other text */
-  font-size: 14px; /* Slightly smaller placeholder text */
+  font-size: var(--font-size-sm); /* Slightly smaller for cleaner look */
 }
 
 #user-input:focus::placeholder {
-  opacity: 0.2; /* More visible when focused but still subtle */
+  opacity: 0.15; /* Very subtle when focused */
 }
 
 /* Add transition to the input itself */
@@ -830,15 +1026,15 @@ main {
   }
 }
 
-/* Info button styles */
+/* Info button styles - minimal design */
 #info-button {
   position: fixed;
   top: 18px;
-  left: 18px;
-  width: 36px;
-  height: 36px;
+  left: 18px; /* Move to left side to avoid overlap with logo */
+  width: 32px; /* Slightly smaller */
+  height: 32px; /* Slightly smaller */
   border-radius: 50%;
-  background-color: rgba(30, 30, 30, 0.3);
+  background-color: transparent; /* Remove background */
   border: none;
   color: var(--text-primary);
   display: flex;
@@ -846,33 +1042,30 @@ main {
   justify-content: center;
   cursor: pointer;
   z-index: 200;
-  transition: background-color var(--transition), transform var(--transition), opacity var(--transition);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  box-shadow: none;
-  opacity: 0.85;
+  transition: opacity 0.2s ease;
+  opacity: 0.7; /* Slightly transparent by default */
+}
+
+/* Hover and active states for info button */
+#info-button:hover {
+  opacity: 1; /* Full opacity on hover */
+}
+
+#info-button:active {
+  opacity: 0.9; /* Slight feedback on click */
 }
 
 /* Responsive adjustments for mobile */
 @media (max-width: 768px) {
   #info-button {
-    width: 38px;
-    height: 38px;
+    width: 32px;
+    height: 32px;
     top: 16px;
-    left: 16px;
-    background-color: rgba(30, 30, 30, 0.35);
+    left: 16px; /* Keep on left side */
   }
 }
 
-#info-button:hover {
-  background-color: rgba(138, 133, 255, 0.2);
-  transform: scale(1.03);
-  opacity: 1;
-}
-
-#info-button:active {
-  transform: scale(0.97);
-}
+/* Removed redundant hover styles */
 
 /* Info panel styles */
 #info-panel {
@@ -885,33 +1078,109 @@ main {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   z-index: 300;
-  transition: left var(--transition), width var(--transition), padding var(--transition);
+  transition: left var(--transition-slow) cubic-bezier(0.34, 1.2, 0.64, 1),
+              width var(--transition-slow) cubic-bezier(0.34, 1.2, 0.64, 1),
+              padding var(--transition-slow) cubic-bezier(0.34, 1.2, 0.64, 1);
   overflow-y: auto;
   box-shadow: none;
   padding: 28px 24px;
   box-sizing: border-box;
   border-right: 1px solid rgba(255, 255, 255, 0.01);
+  will-change: left, width, padding;
 }
 
-/* Panel drag handle */
+/* Panel drag handle - ultra minimal and smoother */
 #panel-drag-handle {
   position: absolute;
   top: 0;
   right: 0;
-  width: 4px;
+  width: 1px;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.02);
+  background-color: rgba(255, 255, 255, 0.02); /* Even more subtle by default */
   cursor: ew-resize;
   z-index: 310;
-  transition: background-color var(--transition);
+  transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); /* Smoother, more relaxed transition */
+  touch-action: none;
+  will-change: background-color, width;
 }
 
 #panel-drag-handle:hover {
-  background-color: rgba(138, 133, 255, 0.15);
+  background-color: rgba(70, 130, 180, 0.08); /* More subtle hover effect */
+  width: 2px;
 }
 
 #panel-drag-handle:active {
-  background-color: rgba(138, 133, 255, 0.25);
+  background-color: rgba(70, 130, 180, 0.12); /* More subtle active effect */
+  width: 2px;
+}
+
+/* Subtle visual indicator for expanded mode */
+#info-panel.expanded #panel-drag-handle {
+  width: 1px;
+  background-color: rgba(70, 130, 180, 0.03); /* Even more subtle in expanded mode */
+  border-left: none;
+}
+
+#info-panel.expanded #panel-drag-handle:hover {
+  background-color: rgba(70, 130, 180, 0.08); /* More subtle hover effect in expanded mode */
+  width: 2px;
+}
+
+#info-panel.expanded #panel-drag-handle:active {
+  background-color: rgba(70, 130, 180, 0.15);
+  width: 2px;
+}
+
+/* Minimal tooltip indicator */
+#panel-drag-handle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  width: 3px;
+  height: 24px;
+  transform: translateY(-50%);
+  background-color: rgba(70, 130, 180, 0.1);
+  border-radius: 1.5px;
+  opacity: 0;
+  transition: opacity 0.3s ease, width 0.3s ease;
+  pointer-events: none;
+  z-index: 320;
+}
+
+#panel-drag-handle:hover::after {
+  opacity: 1;
+}
+
+#info-panel.expanded #panel-drag-handle::after {
+  right: auto;
+  left: 6px;
+}
+
+/* Add subtle dots to indicate draggability */
+#panel-drag-handle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 3px;
+  width: 2px;
+  height: 40px;
+  transform: translateY(-50%);
+  background-image: radial-gradient(circle, rgba(70, 130, 180, 0.2) 1px, transparent 1px);
+  background-size: 2px 6px;
+  background-repeat: repeat-y;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+#panel-drag-handle:hover::before {
+  opacity: 0.7;
+}
+
+#info-panel.expanded #panel-drag-handle::before {
+  right: auto;
+  left: 3px;
 }
 
 /* Expanded panel state */
@@ -967,6 +1236,17 @@ body.resizing * {
   user-select: none !important;
 }
 
+/* Input dragging state for mobile */
+body.input-dragging {
+  overflow: hidden !important;
+  touch-action: none !important;
+}
+
+body.input-dragging * {
+  touch-action: none !important;
+  user-select: none !important;
+}
+
 /* Responsive adjustments for mobile */
 @media (max-width: 480px) {
   #info-panel {
@@ -988,6 +1268,55 @@ body.resizing * {
   .features span {
     font-size: 12px;
   }
+
+  #close-panel, #expand-panel {
+    width: 40px;
+    height: 40px;
+    top: 16px;
+  }
+
+  #close-panel {
+    right: 16px;
+  }
+
+  #expand-panel {
+    right: 64px;
+  }
+
+  #close-panel svg, #expand-panel svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Minimal mobile drag handle */
+  #panel-drag-handle {
+    width: 1px;
+  }
+
+  #panel-drag-handle:hover,
+  #panel-drag-handle:active {
+    width: 2px;
+  }
+
+  #info-panel.expanded #panel-drag-handle {
+    width: 1px;
+  }
+
+  #info-panel.expanded #panel-drag-handle:hover,
+  #info-panel.expanded #panel-drag-handle:active {
+    width: 2px;
+  }
+
+  /* Enhance the visual indicators for touch devices */
+  #panel-drag-handle::before {
+    height: 60px;
+    background-size: 2px 5px;
+    opacity: 0.3;
+  }
+
+  #panel-drag-handle::after {
+    height: 40px;
+  }
 }
 
 #info-panel.open {
@@ -1004,10 +1333,12 @@ body.resizing * {
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 250; /* Between the info button and panel */
   opacity: 0;
-  transition: opacity var(--transition);
+  transition: opacity var(--transition-slow) cubic-bezier(0.25, 0.1, 0.25, 1);
   pointer-events: none;
-  backdrop-filter: blur(1px);
-  -webkit-backdrop-filter: blur(1px);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  touch-action: none;
+  will-change: opacity;
 }
 
 #panel-overlay.visible {
@@ -1017,18 +1348,20 @@ body.resizing * {
 
 #close-panel, #expand-panel {
   position: absolute;
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background-color: transparent;
-  border: none;
+  background-color: rgba(30, 30, 30, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   color: var(--text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform var(--transition), opacity var(--transition);
-  opacity: 0.6;
+  transition: transform var(--transition), opacity var(--transition), background-color var(--transition);
+  opacity: 0.8;
+  z-index: 310;
+  touch-action: manipulation;
 }
 
 #close-panel {
@@ -1045,32 +1378,44 @@ body.resizing * {
   transform: scale(1.05);
   opacity: 1;
   color: var(--text-primary);
+  background-color: rgba(70, 130, 180, 0.2);
 }
 
 #close-panel:active, #expand-panel:active {
   transform: scale(0.95);
+  background-color: rgba(70, 130, 180, 0.3);
 }
 
 #close-panel svg, #expand-panel svg {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 #info-panel.expanded #expand-panel svg {
-  transform: rotate(180deg);
+  transform: translate(-50%, -50%);
+}
+
+#info-panel.expanded #expand-panel path {
+  d: path('M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z');
 }
 
 .panel-content {
   margin-top: 12px;
   opacity: 0;
   transform: translateY(3px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+              transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  will-change: opacity, transform;
 }
 
 #info-panel.open .panel-content {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 0.05s;
+  transition-delay: 0.1s;
 }
 
 .panel-content h2 {
@@ -1109,6 +1454,47 @@ body.resizing * {
   position: absolute;
   right: -6px;
   opacity: 0.5;
+}
+
+/* Minimal drag indicator for full screen mode */
+.drag-hint {
+  position: fixed;
+  top: 50%;
+  right: 12px;
+  width: 2px;
+  height: 40px;
+  background-color: rgba(70, 130, 180, 0.2);
+  z-index: 350;
+  opacity: 0;
+  transform: translateY(-50%);
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  animation: pulseOpacity 2s ease-in-out infinite;
+}
+
+/* Add subtle dots to indicate draggability */
+.drag-hint::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle, rgba(70, 130, 180, 0.4) 1px, transparent 1px);
+  background-size: 2px 6px;
+  background-repeat: repeat-y;
+}
+
+@keyframes pulseOpacity {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+@media (max-width: 480px) {
+  .drag-hint {
+    right: 8px;
+    height: 30px;
+  }
 }
 
 /* Showcase content styles */
@@ -1502,11 +1888,104 @@ body.resizing * {
   }
 }
 
-/* Mobile styles */
-@media (max-width: 480px) {
+/* Enhanced Mobile Styles */
+
+/* Small phones (up to 360px) */
+@media (max-width: 360px) {
+  #close-panel, #expand-panel {
+    width: 36px;
+    height: 36px;
+    top: 12px;
+  }
+
+  #close-panel {
+    right: 12px;
+  }
+
+  #expand-panel {
+    right: 56px;
+  }
+
+  #close-panel svg, #expand-panel svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Ultra-minimal drag handle for small phones */
+  #panel-drag-handle {
+    width: 1px;
+    background-color: rgba(70, 130, 180, 0.1);
+  }
+
+  #info-panel.expanded #panel-drag-handle {
+    width: 1px;
+    background-color: rgba(70, 130, 180, 0.1);
+  }
+
+  /* Make the visual indicators slightly more visible on small screens */
+  #panel-drag-handle::before {
+    opacity: 0.4;
+    right: 2px;
+  }
+
+  #info-panel.expanded #panel-drag-handle::before {
+    left: 2px;
+  }
+  .input-area {
+    width: 95%;
+    max-width: 95%;
+    padding: 8px 10px;
+    /* Initial state will be centered by JavaScript */
+  }
+
+  #user-input {
+    font-size: 13px;
+    min-height: 32px;
+  }
+
+  .drag-handle {
+    width: 25px;
+    height: 2.5px;
+    margin-bottom: 6px;
+  }
+
+  .privacy-badge {
+    margin: 10px auto 14px;
+    padding: 3px 6px;
+  }
+
+  .privacy-icon {
+    font-size: 12px;
+  }
+
+  #info-button, .top-right-logo {
+    width: 28px;
+    height: 28px;
+    top: 12px;
+  }
+
+  #info-button {
+    left: 12px;
+  }
+
+  .top-right-logo {
+    right: 12px;
+  }
+
+  .message {
+    max-width: 85%;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
+/* Medium phones (361px - 480px) */
+@media (min-width: 361px) and (max-width: 480px) {
   .input-area {
     width: 90%;
     max-width: 90%;
+    padding: 10px 12px;
+    /* Initial state will be centered by JavaScript */
   }
 
   .privacy-badge {
@@ -1522,6 +2001,23 @@ body.resizing * {
     font-size: 14px;
   }
 
+  #info-button, .top-right-logo {
+    width: 32px;
+    height: 32px;
+    top: 14px;
+  }
+
+  #info-button {
+    left: 14px;
+  }
+
+  .top-right-logo {
+    right: 14px;
+  }
+}
+
+/* All mobile devices - shared styles */
+@media (max-width: 480px) {
   .privacy-badge.pulse .privacy-icon {
     animation: iconPulse 2s ease-in-out;
   }
@@ -1531,5 +2027,365 @@ body.resizing * {
     50% { transform: scale(1.2); }
   }
 
-  /* Fade overlays removed for cleaner look */
+  /* Improve touch targets for better mobile usability */
+  button, .drag-handle, .nav-back, #info-button, .top-right-logo {
+    touch-action: manipulation;
+  }
+
+  /* Initial state will be centered, but allow dragging */
+  .input-area {
+    /* No forced positioning here - will be set by JavaScript */
+  }
+
+  /* Ensure content is visible with notches and home indicators */
+  main {
+    padding-bottom: env(safe-area-inset-bottom, 10px);
+    padding-top: env(safe-area-inset-top, 0);
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
+  }
+
+  /* Optimize for mobile portrait orientation */
+  .chat-container {
+    padding-bottom: 80px; /* Ensure space for input area */
+  }
+
+  /* Improve tap targets */
+  .cookie-accept, #reset-position, #info-button, .top-right-logo {
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  /* Ensure cookie accept button is properly displayed */
+  .cookie-accept {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+  }
+}
+
+/* Mobile landscape orientation */
+@media (max-height: 480px) and (orientation: landscape) {
+  #info-button, .top-right-logo {
+    top: 8px;
+  }
+
+  #info-button {
+    left: 8px;
+  }
+
+  .top-right-logo {
+    right: 8px;
+  }
+
+  .privacy-badge {
+    margin: 8px auto 12px;
+  }
+
+  .chat-container {
+    padding-bottom: 60px;
+  }
+
+  .input-area {
+    padding: 8px 12px;
+    /* Initial state will be centered by JavaScript */
+  }
+
+  #user-input {
+    min-height: 32px;
+  }
+
+  .drag-handle {
+    margin-bottom: 4px;
+  }
+}
+
+.top-right-logo {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  width: 36px;
+  height: 36px;
+  z-index: 200;
+  opacity: 0.85;
+  transition: opacity var(--transition), transform var(--transition);
+}
+
+.top-right-logo .logo-svg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  object-fit: contain;
+}
+
+.top-right-logo:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* Responsive adjustment for mobile */
+@media (max-width: 768px) {
+  .top-right-logo {
+    width: 32px;
+    height: 32px;
+    top: 16px;
+    right: 16px;
+  }
+}
+
+/* Copyright notice styling */
+.copyright-notice {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  font-weight: var(--font-weight-light);
+  opacity: 0.7;
+}
+
+.terms-notice {
+  margin-top: var(--spacing-sm);
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  font-weight: var(--font-weight-light);
+  opacity: 0.8;
+}
+
+.terms-notice a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: opacity var(--transition);
+  opacity: 0.85;
+  margin: 0 4px;
+}
+
+.terms-notice a:hover {
+  opacity: 1;
+}
+
+/* Privacy badge refinements */
+.privacy-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  letter-spacing: -0.01em;
+  font-weight: var(--font-weight-light);
+  opacity: 0.9;
+  transition: opacity var(--transition);
+}
+
+.privacy-badge:hover {
+  opacity: 1;
+}
+
+.privacy-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.privacy-text {
+  position: relative;
+  top: 0.5px;
+}
+
+@media (max-width: 480px) {
+  .terms-notice {
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-xs);
+    font-size: 11px;
+  }
+
+  .privacy-badge {
+    padding: 4px 8px;
+  }
+
+  .privacy-text {
+    display: none;
+  }
+
+  .privacy-icon {
+    font-size: 12px;
+  }
+}
+
+/* Cookie Notice - Ultra Minimal */
+.cookie-notice {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: rgba(20, 20, 20, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1000;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  max-width: 90%;
+  width: max-content;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  opacity: 0;
+}
+
+.cookie-notice.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.cookie-notice-text {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+  font-weight: var(--font-weight-light);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.cookie-accept {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  background: rgba(70, 130, 180, 0.2);
+  color: var(--accent);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
+  overflow: visible;
+}
+
+.cookie-accept svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+  transition: all 0.2s ease;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cookie-accept:hover {
+  background: rgba(70, 130, 180, 0.3);
+  transform: scale(1.05);
+}
+
+.cookie-accept:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 480px) {
+  .cookie-notice {
+    bottom: 16px;
+    padding: 8px 12px;
+    gap: 10px;
+  }
+
+  .cookie-notice-text {
+    font-size: 11px;
+  }
+
+  .cookie-accept {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .cookie-accept svg {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.feature-card.prompt-book {
+  background: none;
+  padding: 0;
+}
+
+.prompt-book-container {
+  margin-top: var(--spacing-lg);
+  text-align: center;
+}
+
+.prompt-book-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: -0.01em;
+  font-weight: var(--font-weight-light);
+  transition: all 0.2s ease;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: rgba(30, 30, 30, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.prompt-book-link:hover {
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(30, 30, 30, 0.8);
+  transform: translateY(-1px);
+}
+
+.prompt-book-link:active {
+  transform: translateY(0);
+}
+
+.prompt-book-link svg {
+  transition: transform 0.2s ease;
+  opacity: 0.7;
+}
+
+.prompt-book-link:hover svg {
+  transform: translateX(2px);
+  opacity: 1;
+}
+
+@media (max-width: 480px) {
+  .prompt-book-container {
+    margin-top: var(--spacing-md);
+  }
+
+  .prompt-book-link {
+    font-size: 11px;
+    padding: 5px 8px;
+  }
+
+  .prompt-book-link svg {
+    width: 8px;
+    height: 8px;
+  }
 }

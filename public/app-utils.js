@@ -1,75 +1,63 @@
-/**
- * Utility functions for the application
- */
+// Utility functions for the app
 
-/**
- * Checks if the current device is a mobile device
- * @returns {boolean} True if the device is mobile, false otherwise
- */
+// Function to check if the device is mobile
 function isMobileDevice() {
-  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-  
-  // Check for mobile devices using common patterns
-  const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
-  
-  return mobileRegex.test(userAgent) || 
-         (window.innerWidth <= 800 && window.innerHeight <= 900);
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+         (window.innerWidth <= 768);
 }
 
-/**
- * Triggers vibration with a specific pattern if supported
- * @param {number|number[]} pattern - Vibration duration in ms or pattern array
- * @param {string} type - Type of vibration (used for logging)
- * @returns {boolean} - True if vibration was triggered successfully
- */
-function triggerVibration(pattern, type = 'generic') {
-  // Only vibrate if the device is mobile and supports vibration
+// Function to trigger a very soft vibration for subtle feedback
+// This is used for UI interactions to provide gentle haptic feedback
+function triggerSoftVibration() {
   if (isMobileDevice() && 'vibrate' in navigator) {
-    try {
-      navigator.vibrate(pattern);
-      return true;
-    } catch (error) {
-      console.warn(`${type} vibration not supported:`, error);
-      return false;
+    // Use a very short, gentle vibration (15ms instead of 30ms)
+    navigator.vibrate(15);
+  }
+}
+
+// Function to fix code indentation in markdown code blocks
+function fixCodeIndentation(content) {
+  // Split the content by code block markers
+  const parts = content.split(/```/g);
+
+  // Process each code block (odd-indexed parts)
+  for (let i = 1; i < parts.length; i += 2) {
+    if (i < parts.length) {
+      // Get the code block content
+      let codeBlock = parts[i];
+
+      // Split by newlines
+      const lines = codeBlock.split('\n');
+
+      // First line might contain the language specification
+      const firstLine = lines[0].trim();
+
+      // Rest of the lines contain the actual code
+      const codeLines = lines.slice(1);
+
+      // Find the minimum indentation
+      let minIndent = Infinity;
+      for (const line of codeLines) {
+        if (line.trim() === '') continue; // Skip empty lines
+        const indent = line.search(/\S/);
+        if (indent >= 0 && indent < minIndent) {
+          minIndent = indent;
+        }
+      }
+
+      // Remove the common indentation from each line
+      if (minIndent < Infinity) {
+        const dedentedLines = codeLines.map(line => {
+          if (line.trim() === '') return '';
+          return line.substring(Math.min(minIndent, line.search(/\S/) >= 0 ? line.search(/\S/) : 0));
+        });
+
+        // Reconstruct the code block
+        parts[i] = firstLine + '\n' + dedentedLines.join('\n');
+      }
     }
   }
-  return false;
-}
 
-/**
- * Triggers a soft vibration on mobile devices that support it
- * @param {number} duration - Vibration duration in milliseconds (default: 30ms)
- * @returns {boolean} - True if vibration was triggered successfully
- */
-function triggerSoftVibration(duration = 30) {
-  return triggerVibration(duration, 'soft');
-}
-
-/**
- * Triggers a pattern of vibrations for error feedback
- * @returns {boolean} - True if vibration was triggered successfully
- */
-function triggerErrorVibration() {
-  // Error pattern: short, pause, long
-  return triggerVibration([20, 30, 70], 'error');
-}
-
-/**
- * Triggers a success vibration pattern
- * @returns {boolean} - True if vibration was triggered successfully
- */
-function triggerSuccessVibration() {
-  // Success pattern: short, short
-  return triggerVibration([30, 20, 30], 'success');
-}
-
-// Export the utilities if using modules
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    isMobileDevice,
-    triggerVibration,
-    triggerSoftVibration,
-    triggerErrorVibration,
-    triggerSuccessVibration
-  };
+  // Rejoin the content
+  return parts.join('```');
 }

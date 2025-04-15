@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Prompt Book - Synthara AI</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="prompt-book.css">
+    <script src="prompt-book.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap&text=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!()%@#$%^&*-_+=:;'"" rel="stylesheet">
+    <link rel="icon" href="/svg/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/svg/favicon.svg">
+</head>
+<body>
+    <a href="/" class="top-right-logo" aria-label="Return to Synthara AI">
+        <img src="/svg/logo.svg" alt="Synthara AI Logo" class="logo-svg">
+    </a>
+
+    <main class="prompt-book-page">
+        <a href="/" class="nav-back" aria-label="Back to home">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+        </a>
+
+        <div class="prompt-content">
+            <h1>Prompt Book</h1>
+
+            <!-- Tech Stack Animation Section -->
+            <section class="tech-stack-animation">
+                <div class="tech-stack-container">
+                    <div class="tech-item" data-tech="AI">
+                        <div class="tech-icon">
+                            <div class="icon-shape ai-icon"></div>
+                        </div>
+                        <div class="tech-label">AI</div>
+                    </div>
+                    <div class="tech-item" data-tech="ML">
+                        <div class="tech-icon">
+                            <div class="icon-shape ml-icon"></div>
+                        </div>
+                        <div class="tech-label">ML</div>
+                    </div>
+                    <div class="tech-item" data-tech="NLP">
+                        <div class="tech-icon">
+                            <div class="icon-shape nlp-icon"></div>
+                        </div>
+                        <div class="tech-label">NLP</div>
+                    </div>
+                    <div class="tech-item" data-tech="LLM">
+                        <div class="tech-icon">
+                            <div class="icon-shape llm-icon"></div>
+                        </div>
+                        <div class="tech-label">LLM</div>
+                    </div>
+                    <div class="tech-item" data-tech="API">
+                        <div class="tech-icon">
+                            <div class="icon-shape api-icon"></div>
+                        </div>
+                        <div class="tech-label">API</div>
+                    </div>
+                    <div class="tech-item" data-tech="Cloud">
+                        <div class="tech-icon">
+                            <div class="icon-shape cloud-icon"></div>
+                        </div>
+                        <div class="tech-label">Cloud</div>
+                    </div>
+                </div>
+                <div class="tech-stack-tagline">Click any technology to view architecture details</div>
+
+                <!-- Data Architecture Visualization -->
+                <div class="data-architecture-container">
+                    <div class="close-architecture">&times;</div>
+
+                    <!-- Architecture Diagram -->
+                    <div class="architecture-diagram">
+                        <!-- Data Sources -->
+                        <div class="arch-section" id="data-sources">
+                            <div class="arch-title">Data Sources</div>
+                            <div class="arch-nodes">
+                                <div class="arch-node" id="user-input">User Input</div>
+                                <div class="arch-node" id="external-apis">External APIs</div>
+                                <div class="arch-node" id="databases">Databases</div>
+                            </div>
+                        </div>
+
+                        <!-- Processing Layer -->
+                        <div class="arch-section" id="processing-layer">
+                            <div class="arch-title">Processing Layer</div>
+                            <div class="arch-nodes">
+                                <div class="arch-node" id="nlp-engine">NLP Engine</div>
+                                <div class="arch-node" id="ml-models">ML Models</div>
+                                <div class="arch-node" id="llm-core">LLM Core</div>
+                            </div>
+                        </div>
+
+                        <!-- Integration Layer -->
+                        <div class="arch-section" id="integration-layer">
+                            <div class="arch-title">Integration Layer</div>
+                            <div class="arch-nodes">
+                                <div class="arch-node" id="api-gateway">API Gateway</div>
+                                <div class="arch-node" id="cloud-services">Cloud Services</div>
+                            </div>
+                        </div>
+
+                        <!-- Output Layer -->
+                        <div class="arch-section" id="output-layer">
+                            <div class="arch-title">Output Layer</div>
+                            <div class="arch-nodes">
+                                <div class="arch-node" id="response-generation">Response Generation</div>
+                                <div class="arch-node" id="user-interface">User Interface</div>
+                            </div>
+                        </div>
+
+                        <!-- Data Flow Paths -->
+                        <div class="data-flow-paths">
+                            <!-- Paths will be drawn with SVG via JavaScript -->
+                            <svg id="flow-svg" width="100%" height="100%"></svg>
+                        </div>
+
+                        <!-- Data Packets -->
+                        <div class="data-packets"></div>
+                    </div>
+
+                    <!-- Architecture Description -->
+                    <div class="architecture-description">
+                        <h3>Synthara AI Architecture</h3>
+                        <p class="arch-description-text">Select a technology component to see how data flows through our system.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="prompt-section">
+                <div class="prompt-grid">
+                    <div class="prompt-card">
+                        <h3>Premise Analysis</h3>
+                        <div class="prompt-example">Let's analyze this step by step:</div>
+                    </div>
+
+                    <div class="prompt-card">
+                        <h3>Logical Fallacies</h3>
+                        <div class="prompt-example">Can you identify any logical fallacies in:</div>
+                    </div>
+
+                    <div class="prompt-card">
+                        <h3>Argument Strength</h3>
+                        <div class="prompt-example">Evaluate the strength of:</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

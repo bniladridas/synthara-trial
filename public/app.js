@@ -97,6 +97,20 @@ function toggleIncognitoMode() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Check if there's a model parameter in the URL (coming from model cards page)
+  const urlParams = new URLSearchParams(window.location.search);
+  const modelParam = urlParams.get('model');
+
+  // If a model was selected on the model cards page, set it in the selector
+  if (modelParam) {
+    const modelSelector = document.getElementById('model-selector');
+    if (modelSelector) {
+      modelSelector.value = modelParam;
+
+      // Clear the URL parameter without refreshing the page
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }
   // Try to detect incognito mode
   detectIncognito().then(isIncognito => {
     if (isIncognito) {
@@ -1286,13 +1300,17 @@ document.addEventListener('DOMContentLoaded', () => {
       // Trigger a subtle vibration when the thinking indicator appears
       triggerSoftVibration();
 
+      // Get the selected model type
+      const modelSelector = document.getElementById('model-selector');
+      const modelType = modelSelector ? modelSelector.value : 'gamer';
+
       // Send request to our backend
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt, modelType }),
       });
 
       // Remove loading indicator

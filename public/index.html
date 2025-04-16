@@ -121,7 +121,7 @@
 
           <div class="prompt-book-container">
             <a href="/prompt-book" class="prompt-book-link" aria-label="Read prompt book">
-              <span>Prompt book</span>
+              <span>Prompt Book</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
@@ -129,8 +129,8 @@
           </div>
 
           <div class="prompt-book-container">
-            <a href="/linux-git" class="prompt-book-link" aria-label="Linux & Git reference">
-              <span>Linux & Git</span>
+            <a href="/model-cards" class="prompt-book-link" aria-label="AI Model Cards">
+              <span>Model Cards</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
@@ -198,6 +198,23 @@
     <div class="input-area" id="draggable-input-area">
       <div class="drag-handle"></div>
       <div class="drag-tooltip">Drag to move</div>
+      <div class="model-selector-container">
+        <select id="model-selector" title="Select AI personality">
+          <option value="gamer">Gamer Mode</option>
+          <option value="hacker">Hacker Mode</option>
+          <option value="nightowl">Night Owl Mode</option>
+          <option value="professor">Professor Mode</option>
+          <option value="newbie">Newbie Mode</option>
+          <option value="business">Business Mode</option>
+          <option value="happy">Happy Mode</option>
+          <option value="sage">Sage Mode</option>
+          <option value="creative">Creative Mode</option>
+          <option value="concise">Concise Mode</option>
+          <option value="friendly">Friendly Mode</option>
+          <option value="practical">Practical Mode</option>
+
+        </select>
+      </div>
       <textarea id="user-input" placeholder="Ask Synthara AI anything..." rows="1"></textarea>
       <button id="reset-position" title="Reset position">↺</button>
     </div>

@@ -44,10 +44,10 @@ router.get('/prompt-book', (req, res) => {
   res.sendFile(path.join(__dirname, '../public', 'prompt-book.html'));
 });
 
-// Add the Linux & Git route
-router.get('/linux-git', (req, res) => {
-  req.logger.info('Serving Linux & Git page');
-  res.sendFile(path.join(__dirname, '../public', 'linux-git.html'));
+// Add the Model Cards route
+router.get('/model-cards', (req, res) => {
+  req.logger.info('Serving Model Cards page');
+  res.sendFile(path.join(__dirname, '../public', 'model-cards.html'));
 });
 
 module.exports = router;
